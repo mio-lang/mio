@@ -11,6 +11,9 @@ from rpython.jit.codewriter.policy import JitPolicy
 from rpython.rlib.streamio import open_file_as_stream
 
 
+from mio.lexer import lex
+
+
 def main(argv):
     if not len(argv) == 2:
         print __doc__
@@ -21,7 +24,8 @@ def main(argv):
     source = f.readall()
     f.close()
 
-    print source
+    for token in lex(source):
+        print "<Token (%s, %s)>" % (token.name, token.value)
 
     return 0
 
