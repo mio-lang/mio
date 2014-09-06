@@ -9,6 +9,7 @@ import sys
 
 from rpython.jit.codewriter.policy import JitPolicy
 from rpython.rlib.streamio import open_file_as_stream
+from pypy.objspace.std.bytesobject import string_escape_encode
 
 
 from mio.lexer import lex
@@ -25,7 +26,10 @@ def main(argv):
     f.close()
 
     for token in lex(source):
-        print "<Token (%s, %s)>" % (token.name, token.value)
+        print "<Token (%s, %s)>" % (
+            token.name,
+            string_escape_encode(token.value, "'")
+        )
 
     return 0
 
