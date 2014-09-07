@@ -1,5 +1,21 @@
+Design
+======
+
+mio's interpreter is a stack based virtual machine.
+
+
+Grammar
+-------
+
+Right now in mio's early stages of development the grammar currently is:
+
+::
+    
+    expression : terminator
+
+
 mio Bytecode Insutrction Set
-============================
+----------------------------
 
 - ``LOAD <value>``
   Load a constant value onto the stack (number, string, identifier).
