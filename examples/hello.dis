@@ -1,0 +1,6 @@
+LOAD "Hello World!"
+PUSH
+PUSH print
+EVAL
+PUSH ;
+EVAL
