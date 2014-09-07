@@ -22,5 +22,11 @@ mio Bytecode Insutrction Set
   Evaluate the message on the top of the stack setting the context to
   the result of the evaluation.
 
+- ``PUSHF``
+  Push the current frame on to the stack. (*Continuations*)
+
+- ``POPF``
+  Pop frame off the top of the stack. (*Continuations*)
+
 - ``END``
   Terminate the interpreter.
