@@ -21,3 +21,6 @@ mio Bytecode Insutrction Set
 - ``EVAL``
   Evaluate the message on the top of the stack setting the context to
   the result of the evaluation.
+
+- ``END``
+  Terminate the interpreter.

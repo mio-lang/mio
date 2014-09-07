@@ -9,11 +9,9 @@
 from rply import ParserGenerator
 
 
-from .tokens import TOKENS
-from .objects import Message
+from mio.ast import Message
+from mio.tokens import TOKENS
 
-
-print TOKENS.keys()
 
 pg = ParserGenerator(TOKENS.keys(), cache_id=__name__)
 

@@ -14,6 +14,8 @@ from pypy.objspace.std.bytesobject import string_escape_encode
 
 from mio.lexer import lex
 from mio.parser import parse
+from mio.compiler import compile
+from mio.interpreter import interpret
 
 
 def main(argv):
@@ -38,6 +40,15 @@ def main(argv):
     print "AST:"
     ast = parse(lex(source))
     print ast.getvalue()
+
+    print "Compile:"
+    bc = compile(ast)
+    print string_escape_encode(bc.dump(), "'")
+
+    print "Interpret:"
+    frame = interpret(bc)
+    for value in frame.stack:
+        print value
 
     return 0
 
