@@ -6,13 +6,18 @@
 Minimal I/O Interpreter
 =======================
 
-This is a minimal I/O Interpreter.
+This is a minimal I/O Interpreter. This is a rewrite of:
+
+- https://bitbucket.org/prologic/mio-lang
+
+
+.. note:: Very early development.
 
 
 Prerequisites
 -------------
 
-It's recommended that you do all development using a Python Virtual
+It is recommended that you do all development using a Python Virtual
 Environment using `virtualenv`_ and/or using the nice `virtualenvwrapper`_.
 
 ::
@@ -40,8 +45,8 @@ run ``python setup.py develop`` or ``pip install -r requirements.txt``
 
 ::
     
-    $ hg clone https://bitbucket.org/prologic/mio
-    $ cd mio
+    $ hg clone https://bitbucket.org/prologic/mio-lang-rewrite
+    $ cd mio-lang-rewrite
     $ pip install -r requirements.txt
 
 
@@ -53,7 +58,7 @@ Compiler.
 
 ::
     
-    $ rpython mio/main.py
+    $ make
 
 
 Usage
@@ -64,5 +69,5 @@ compiled interpreter ``mio``.
 
 ::
     
-    $ mio examples/fib.mio
-    $ ./bin/mio examples/fib.mio
+    $ miopy examples/001.mio
+    $ ./bin/mio examples/001.mio
