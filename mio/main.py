@@ -13,6 +13,7 @@ from pypy.objspace.std.bytesobject import string_escape_encode
 
 
 from mio.lexer import lex
+from mio.parser import parse
 
 
 def main(argv):
@@ -25,11 +26,18 @@ def main(argv):
     source = f.readall()
     f.close()
 
-    for token in lex(source):
+    print "Tokens:"
+    tokens = lex(source)
+
+    for token in tokens:
         print "<Token (%s, %s)>" % (
             token.name,
             string_escape_encode(token.value, "'")
         )
+
+    print "AST:"
+    ast = parse(lex(source))
+    print ast.getvalue()
 
     return 0
 

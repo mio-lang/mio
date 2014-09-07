@@ -64,14 +64,24 @@ strre = "|".join([strre.format(**quote) for quote in quotes])
 strre = strre.format(**quotes[3])
 
 
-TOKENS["string"] = strre
-TOKENS["number"] = r"(-?(0|([1-9][0-9]*))(\.[0-9]+)?([Ee]-?[0-9]+)?)"
-TOKENS["identifier"] = r"[A-Za-z_][A-Za-z0-9_]*"
-TOKENS["operator"] = "|".join(map(escape, operators))
-TOKENS["op"] = r"[(){}\[\],:;\n\r]"
+TOKENS["T_STRING"] = strre
+TOKENS["T_NUMBER"] = r"(-?(0|([1-9][0-9]*))(\.[0-9]+)?([Ee]-?[0-9]+)?)"
+TOKENS["T_IDENTIFIER"] = r"[A-Za-z_][A-Za-z0-9_]*"
+TOKENS["T_OPERATOR"] = "|".join(map(escape, operators))
+TOKENS["T_TERMINATOR"] = r"[;\n\r]"
+TOKENS["T_LBRACKET"] = "\["
+TOKENS["T_RBRACKET"] = "\]"
+TOKENS["T_LPAREN"] = "\("
+TOKENS["T_RPAREN"] = "\)"
+TOKENS["T_LBRACE"] = "\{"
+TOKENS["T_RBRACE"] = "\}"
+TOKENS["T_COMMA"] = "\,"
+TOKENS["T_COLON"] = "\:"
 
 
 IGNORES = [
-    r"#.*",     # Comments
-    r"[ \t]+",  # Whitespace
+    r"#.*",         # #Comment
+    r"\/\/.*",      # //Comment
+    r"\/\*.*\*\/",  # /*Comment*/
+    r"[ \t]+",      # Whitespace
 ]
