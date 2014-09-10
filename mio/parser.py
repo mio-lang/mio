@@ -78,8 +78,6 @@ def expression(state, p):
 
 
 @pg.production("message : symbol")
-@pg.production("message : arguments")
-@pg.production("message : terminator")
 @pg.production("message : symbol arguments")
 def message(state, p):
     print "message:", p
@@ -141,8 +139,9 @@ def arguments_list(state, p):
 
 
 @pg.production("symbol : T_IDENTIFIER")
-@pg.production("symbol : T_NUMBER")
+@pg.production("symbol : T_TERMINATOR")
 @pg.production("symbol : T_OPERATOR")
+@pg.production("symbol : T_NUMBER")
 @pg.production("symbol : T_STRING")
 def symbol(state, p):
     print "symbol:", p
@@ -153,15 +152,6 @@ def symbol(state, p):
     value = parse_literal(name)
 
     return Message(name, value=value)
-
-
-@pg.production("terminator : T_TERMINATOR")
-def terminator(state, p):
-    print "terminator:", p
-
-    assert isToken(p[0])
-
-    return Message(p[0].getstr())
 
 
 @pg.error
