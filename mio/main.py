@@ -38,8 +38,8 @@ def main(argv):
         )
 
     print "AST:"
-    ast = parse(lex(source))
-    print ast.getvalue()
+    ast = parse(lex(source), filename)
+    print repr(ast)
 
     print "Compile:"
     bc = compile(ast)
