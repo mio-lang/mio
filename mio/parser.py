@@ -117,8 +117,8 @@ def arguments(state, p):
 
 
 @pg.production("arguments_list :")
-@pg.production("arguments_list : expression")
-@pg.production("arguments_list : expression T_COMMA arguments_list")
+@pg.production("arguments_list : expressions")
+@pg.production("arguments_list : expressions T_COMMA arguments_list")
 def arguments_list(state, p):
     print "arguments_list:", p
 
