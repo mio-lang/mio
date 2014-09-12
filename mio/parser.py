@@ -71,6 +71,7 @@ def expressions(state, p):
 
 
 @pg.production("expression : message")
+@pg.production("expression : terminator")
 def expression(state, p):
     print "expression:", p
     assert isMessage(p[0])
@@ -139,7 +140,6 @@ def arguments_list(state, p):
 
 
 @pg.production("symbol : T_IDENTIFIER")
-@pg.production("symbol : T_TERMINATOR")
 @pg.production("symbol : T_OPERATOR")
 @pg.production("symbol : T_NUMBER")
 @pg.production("symbol : T_STRING")
@@ -154,8 +154,17 @@ def symbol(state, p):
     return Message(name, value=value)
 
 
+@pg.production("terminator : T_TERMINATOR")
+def terminator(state, p):
+    print "terminator:", p
+
+    assert isToken(p[0])
+
+    return Message(p[0].getstr())
+
+
 @pg.error
-def error(token, expected, state):
+def error(state, token):
     sourcepos = token.getsourcepos()
 
     if sourcepos is None:
@@ -164,9 +173,8 @@ def error(token, expected, state):
         col, line = str(sourcepos.colno), str(sourcepos.lineno)
 
     raise ValueError(
-        "Expected one of %s but got <%s %s> at %s:%s:%s" % (
-            ", ".join(expected), token.gettokentype(),
-            string_escape_encode(token.getstr(), "'"),
+        "Unexpected token <%s %s> at %s:%s:%s" % (
+            token.gettokentype(), string_escape_encode(token.getstr(), "'"),
             state.filename, line, col
         )
     )
