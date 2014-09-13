@@ -37,8 +37,14 @@ class Message(BaseBox):
 
         return " ".join(s)
 
+    def getargs(self):
+        return self.args
+
     def setargs(self, args):
         self.args = args
+
+    def getnext(self):
+        return self.next
 
     def setnext(self, next):
         self.next = next

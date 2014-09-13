@@ -46,17 +46,9 @@ def isString(x):
 def program(state, p):
     print "program:", p
 
-    assert isList(p)
-    assert map(isMessage, p)
+    assert isMessage(p[0])
 
-    chain = p[0]
-
-    next = chain
-    for message in p[1:]:
-        next.setnext(message)
-        next = message
-
-    return chain
+    return p[0]
 
 
 @pg.production("expressions :")
@@ -98,12 +90,9 @@ def message_symbol(state, p):
 def message_arguments(state, p):
     print "message_arguments:", p
 
-    assert isTuple(p[0])
-    assert isString(p[0][0])
-    assert isList(p[0][1])
-    assert all(map(isMessage, p[0][1]))
+    assert isMessage(p[0])
 
-    return Message(p[0][0], p[0][1])
+    return p[0]
 
 
 @pg.production("message : symbol arguments")
@@ -111,12 +100,9 @@ def message_symbol_arguments(state, p):
     print "message_symbol_arguments:", p
 
     assert isMessage(p[0])
-    assert isTuple(p[1])
-    assert isString(p[1][0])
-    assert isList(p[1][1])
-    assert all(map(isMessage, p[1][1]))
+    assert isMessage(p[1])
 
-    p[0].setargs(p[1][1])
+    p[0].setargs(p[1].getargs())
 
     return p[0]
 
@@ -132,30 +118,38 @@ def arguments(state, p):
     assert isToken(p[2])
     assert all(map(isMessage, p[1]))
 
-    return (p[0].getstr() + p[2].getstr(), p[1])
+    name = p[0].getstr() + p[2].getstr()
+    args = p[1]
+
+    return Message(name, args)
 
 
 @pg.production("arguments_list :")
-@pg.production("arguments_list : expressions")
-@pg.production("arguments_list : expressions T_COMMA arguments_list")
 def arguments_list(state, p):
     print "arguments_list:", p
 
-    if len(p) == 3:
-        if isinstance(p[2], list):
-            assert isList(p[2])
-            assert isMessage(p[0])
-            p[2].insert(0, p[0])
-            return p[2]
-        else:
-            assert isMessage(p[0])
-            assert isMessage(p[2])
-            return [p[0], p[2]]
-    elif len(p) == 1:
-        assert isMessage(p[0])
-        return [p[0]]
-    else:
-        return []
+    assert len(p) == 0
+
+    return []
+
+
+@pg.production("arguments_list : expressions")
+def arguments_list_expressions(state, p):
+    print "arguments_list_expressions:", p
+
+    assert isMessage(p[0])
+    return [p[0]]
+
+
+@pg.production("arguments_list : expressions T_COMMA arguments_list")
+def arguments_list_expressions_t_comma_arguments_list(state, p):
+    print "arguments_list_expressions_t_comma_arguments_list:", p
+
+    assert isMessage(p[0])
+    assert isToken(p[1])
+    assert isList(p[2])
+    p[2].insert(0, p[0])
+    return p[2]
 
 
 @pg.production("symbol : T_IDENTIFIER")
