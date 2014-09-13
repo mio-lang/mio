@@ -35,7 +35,7 @@ class Message(BaseBox):
             s.append("%s%s" % (next.name, args))
             next = next.next
 
-        return "".join(s)
+        return " ".join(s)
 
     def setargs(self, args):
         self.args = args
