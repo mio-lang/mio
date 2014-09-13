@@ -34,6 +34,14 @@ def isList(x):
     return isinstance(x, list)
 
 
+def isTuple(x):
+    return isinstance(x, tuple)
+
+
+def isString(x):
+    return isinstance(x, str)
+
+
 @pg.production("program : expressions")
 def program(state, p):
     print "program:", p
@@ -79,19 +87,36 @@ def expression(state, p):
 
 
 @pg.production("message : symbol")
-@pg.production("message : arguments")
-@pg.production("message : symbol arguments")
-def message(state, p):
-    print "message:", p
-
-    if len(p) == 1:
-        assert isMessage(p[0])
-        return p[0]
+def message_symbol(state, p):
+    print "message_symbol:", p
 
     assert isMessage(p[0])
-    assert isMessage(p[1])
+    return p[0]
 
-    p[0].setargs([p[1]])
+
+@pg.production("message : arguments")
+def message_arguments(state, p):
+    print "message_arguments:", p
+
+    assert isTuple(p[0])
+    assert isString(p[0][0])
+    assert isList(p[0][1])
+    assert all(map(isMessage, p[0][1]))
+
+    return Message(p[0][0], p[0][1])
+
+
+@pg.production("message : symbol arguments")
+def message_symbol_arguments(state, p):
+    print "message_symbol_arguments:", p
+
+    assert isMessage(p[0])
+    assert isTuple(p[1])
+    assert isString(p[1][0])
+    assert isList(p[1][1])
+    assert all(map(isMessage, p[1][1]))
+
+    p[0].setargs(p[1][1])
 
     return p[0]
 
@@ -102,19 +127,12 @@ def message(state, p):
 def arguments(state, p):
     print "arguments:", p
 
-    if p[0].gettokentype() == "T_LPAREN":
-        name = "()"
-    elif p[0].gettokentype() == "T_LBRACE":
-        name = "{}"
-    elif p[0].gettokentype() == "T_LBRACKET":
-        name = "[]"
-    else:
-        name = "??"
-
+    assert isToken(p[0])
     assert isList(p[1])
+    assert isToken(p[2])
     assert all(map(isMessage, p[1]))
 
-    return Message(name, args=p[1])
+    return (p[0].getstr() + p[2].getstr(), p[1])
 
 
 @pg.production("arguments_list :")
