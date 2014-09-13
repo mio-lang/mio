@@ -67,7 +67,6 @@ def expressions_expression_expressions(state, p):
 
 
 @pg.production("expression : message")
-@pg.production("expression : terminator")
 def expression(state, p):
     print "expression:", p
     assert isMessage(p[0])
@@ -148,10 +147,12 @@ def arguments_list_expressions_t_comma_arguments_list(state, p):
     return p[2]
 
 
+@pg.production("symbol : T_TERMINATOR")
 @pg.production("symbol : T_IDENTIFIER")
 @pg.production("symbol : T_OPERATOR")
 @pg.production("symbol : T_NUMBER")
 @pg.production("symbol : T_STRING")
+@pg.production("symbol : T_COLON")
 def symbol(state, p):
     print "symbol:", p
 
@@ -161,15 +162,6 @@ def symbol(state, p):
     value = parse_literal(name)
 
     return Message(name, value=value)
-
-
-@pg.production("terminator : T_TERMINATOR")
-def terminator(state, p):
-    print "terminator:", p
-
-    assert isToken(p[0])
-
-    return Message(p[0].getstr())
 
 
 @pg.error
