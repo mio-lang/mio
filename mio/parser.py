@@ -79,6 +79,7 @@ def expression(state, p):
 
 
 @pg.production("message : symbol")
+@pg.production("message : arguments")
 @pg.production("message : symbol arguments")
 def message(state, p):
     print "message:", p
