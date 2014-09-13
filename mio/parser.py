@@ -114,7 +114,7 @@ def arguments(state, p):
     assert isList(p[1])
     assert all(map(isMessage, p[1]))
 
-    return Message(name, args=[p[1]])
+    return Message(name, args=p[1])
 
 
 @pg.production("arguments_list :")
