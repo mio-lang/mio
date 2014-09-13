@@ -53,18 +53,16 @@ def program(state, p):
 
 @pg.production("expressions :")
 def expressions(state, p):
-    return None
+    return Message("")
+
 
 @pg.production("expressions : expression expressions")
-def expressions(state, p):
+def expressions_expression_expressions(state, p):
     print "expressions:", p
 
     assert isMessage(p[0])
-    if p[1] is not None:
-        assert isMessage(p[1])
-        p[0].setnext(p[1])
-        return p[0]
-
+    assert isMessage(p[1])
+    p[0].setnext(p[1])
     return p[0]
 
 
