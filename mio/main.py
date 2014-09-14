@@ -39,7 +39,7 @@ def main(argv):
 
     print "AST:"
     ast = parse(lex(source), filename)
-    print repr(ast)
+    print ast.repr()
 
     print "Compile:"
     bc = compile(ast)

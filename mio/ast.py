@@ -22,14 +22,17 @@ class Message(BaseBox):
         self.next = None
 
     def __repr__(self):
-        """NOT RPYTHON"""
+        """NOT_RPYTHON"""
 
+        return self.repr()
+
+    def repr(self):
         s = []
 
         next = self
         while next is not None:
             if next.args:
-                args = "(%s)" % ", ".join([repr(arg) for arg in next.args])
+                args = "(%s)" % ", ".join([arg.repr() for arg in next.args])
             else:
                 args = ""
             s.append("%s%s" % (next.name, args))

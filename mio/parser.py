@@ -56,6 +56,7 @@ def expressions(state, p):
     return Message("")
 
 
+"""
 @pg.production("expressions : expression expressions")
 def expressions_expression_expressions(state, p):
     print "expressions:", p
@@ -162,6 +163,7 @@ def symbol(state, p):
     value = parse_literal(name)
 
     return Message(name, value=value)
+"""
 
 
 @pg.error
