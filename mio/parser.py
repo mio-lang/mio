@@ -81,7 +81,6 @@ def message_symbol(state, p):
     return p[0]
 
 
-"""
 @pg.production("message : arguments")
 def message_arguments(state, p):
     print "message_arguments:", p
@@ -89,7 +88,6 @@ def message_arguments(state, p):
     assert isMessage(p[0])
 
     return p[0]
-"""
 
 
 @pg.production("message : symbol arguments")
@@ -127,13 +125,12 @@ def arguments_list(state, p):
     return Message("")
 
 
-"""
 @pg.production("arguments_list : expressions")
 def arguments_list_expressions(state, p):
     print "arguments_list_expressions:", p
 
     assert isMessage(p[0])
-    return [p[0]]
+    return Message("", [p[0]])
 
 
 @pg.production("arguments_list : expressions T_COMMA arguments_list")
@@ -142,10 +139,12 @@ def arguments_list_expressions_t_comma_arguments_list(state, p):
 
     assert isMessage(p[0])
     assert isToken(p[1])
-    assert isList(p[2])
-    p[2].insert(0, p[0])
+    assert isMessage(p[2])
+
+    args = [p[0]] + p[2].getargs()
+    p[2].setargs(args)
+
     return p[2]
-"""
 
 
 @pg.production("symbol : T_TERMINATOR")
