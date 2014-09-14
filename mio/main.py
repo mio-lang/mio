@@ -45,10 +45,7 @@ def main(argv):
     bc = compile(ast)
     print bc.repr()
 
-    print "Interpret:"
-    frame = interpret(bc)
-    for value in filter(None, frame.stack):
-        print value
+    interpret(bc)
 
     return 0
 

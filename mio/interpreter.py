@@ -20,7 +20,7 @@ def get_printable_location(pc, code, bc):
 
 jitdriver = jit.JitDriver(
     greens=["pc", "code", "bc"],
-    reds=["frame"],
+    reds=["frame", "self"],
     virtualizables=["frame"],
     get_printable_location=get_printable_location
 )
@@ -29,41 +29,50 @@ jitdriver = jit.JitDriver(
 class Frame(object):
 
     _virtualizable2_ = [
-        "stack[*]", "stack_pos", "parent"
+        "stack[*]", "stackp", "parent"
     ]
 
-    def __init__(self, bc, parent=None):
+    def __init__(self, parent=None):
         self = jit.hint(self, fresh_virtualizable=True, access_directly=True)
         self.stack = [None] * 1024
-        self.stack_pos = 0
+        self.stackp = 0
         self.parent = parent
 
     def push(self, value):
-        pos = self.stack_pos
+        pos = self.stackp
         assert pos >= 0
         self.stack[pos] = value
-        self.stack_pos = pos + 1
+        self.stackp = pos + 1
 
     def pop(self):
-        new_pos = self.stack_pos - 1
+        new_pos = self.stackp - 1
         assert new_pos >= 0
         value = self.stack[new_pos]
-        self.stack_pos = new_pos
+        self.stackp = new_pos
         return value
 
 
 class Interpreter(object):
 
-    def __init__(self):
+    _immutable_fields_ = ["bytecode"]
+
+    def __init__(self, bc):
+        self.bc = bc
+
         self.space = ObjectSpace()
 
-    def eval(self, bc):
-        context = self.space.root
-        frame = Frame(bc)
-        code = bc.code
+    def run(self):
+        frame = Frame()
+
         pc = 0
-        while True:
-            jitdriver.jit_merge_point(pc=pc, code=code, bc=bc, frame=frame)
+        bc = self.bc
+        code = bc.code
+        context = self.space.root
+
+        while pc < len(code):
+            jitdriver.jit_merge_point(
+                bc=bc, code=code, frame=frame, pc=pc, self=self
+            )
 
             c = ord(code[pc])
             arg = ord(code[pc + 1])
@@ -77,14 +86,13 @@ class Interpreter(object):
             elif c == bytecode.EVAL:
                 name = frame.pop().name
                 args = []
-                while frame.stack_pos:
+                while frame.stackp:
                     args.append(frame.pop())
                 message = Message(self.space, name, args)
                 frame.push(message.eval(self.space, context, context))
             else:
-                assert False
+                assert AssertionError("Unknown Bytecode: %d" % c)
 
 
 def interpret(bc):
-    interpreter = Interpreter()
-    return interpreter.eval(bc)
+    return Interpreter(bc).run()
