@@ -89,6 +89,7 @@ def message_arguments(state, p):
     assert isMessage(p[0])
 
     return p[0]
+"""
 
 
 @pg.production("message : symbol arguments")
@@ -110,12 +111,11 @@ def arguments(state, p):
     print "arguments:", p
 
     assert isToken(p[0])
-    assert isList(p[1])
+    assert isMessage(p[1])
     assert isToken(p[2])
-    assert all(map(isMessage, p[1]))
 
     name = p[0].getstr() + p[2].getstr()
-    args = p[1]
+    args = p[1].getargs()
 
     return Message(name, args)
 
@@ -124,11 +124,10 @@ def arguments(state, p):
 def arguments_list(state, p):
     print "arguments_list:", p
 
-    assert len(p) == 0
-
-    return []
+    return Message("")
 
 
+"""
 @pg.production("arguments_list : expressions")
 def arguments_list_expressions(state, p):
     print "arguments_list_expressions:", p
