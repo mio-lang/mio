@@ -10,11 +10,12 @@ from rpython.rlib import jit
 
 
 from mio import bytecode
-from mio.ast import Message
+from mio.model import Message
+from mio.objspace import ObjectSpace
 
 
 def get_printable_location(pc, code, bc):
-    return "%s #%d %s" % (bc.get_repr(), pc, bytecode.dis_one(code[pc]))
+    return "%s #%d %s" % (bc.repr(), pc, bytecode.dis_one(code[pc]))
 
 
 jitdriver = jit.JitDriver(
@@ -33,7 +34,7 @@ class Frame(object):
 
     def __init__(self, bc, parent=None):
         self = jit.hint(self, fresh_virtualizable=True, access_directly=True)
-        self.stack = [None] * 10
+        self.stack = [None] * 1024
         self.stack_pos = 0
         self.parent = parent
 
@@ -51,25 +52,39 @@ class Frame(object):
         return value
 
 
-def execute(frame, bc):
-    code = bc.code
-    pc = 0
-    while True:
-        jitdriver.jit_merge_point(pc=pc, code=code, bc=bc, frame=frame)
+class Interpreter(object):
 
-        c = ord(code[pc])
-        arg = ord(code[pc + 1])
-        pc += 2
+    def __init__(self):
+        self.space = ObjectSpace()
 
-        if c == bytecode.LOAD:
-            frame.push(Message(bc.constants[arg]))
-        elif c == bytecode.END:
-            return
-        else:
-            assert False
+    def eval(self, bc):
+        context = self.space.root
+        frame = Frame(bc)
+        code = bc.code
+        pc = 0
+        while True:
+            jitdriver.jit_merge_point(pc=pc, code=code, bc=bc, frame=frame)
+
+            c = ord(code[pc])
+            arg = ord(code[pc + 1])
+            pc += 2
+
+            if c == bytecode.LOAD:
+                constant = bc.constants[arg]
+                frame.push(Message(self.space, constant, value=constant))
+            elif c == bytecode.END:
+                raise SystemExit(0)
+            elif c == bytecode.EVAL:
+                name = frame.pop().name
+                args = []
+                while frame.stack_pos:
+                    args.append(frame.pop())
+                message = Message(self.space, name, args)
+                frame.push(message.eval(self.space, context, context))
+            else:
+                assert False
 
 
 def interpret(bc):
-    frame = Frame(bc)
-    execute(frame, bc)
-    return frame
+    interpreter = Interpreter()
+    return interpreter.eval(bc)

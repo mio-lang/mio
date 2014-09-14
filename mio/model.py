@@ -49,14 +49,14 @@ class Object(object):
             if t is not None:
                 return t
 
-    def apply(self, space, w_receiver, w_message, w_context):
+    def apply(self, space, receiver, message, context):
         return self
 
     def clone(self):
         return Object(self.space, [self])
 
     def __repr__(self):
-        """NOT RPYTHON"""
+        """NOT_RPYTHON"""
 
         return "<%s attrs=%s>" % (self.__class__.__name__, self.attrs.keys(),)
 
@@ -78,7 +78,7 @@ class String(Object):
         return self
 
     def __repr__(self):
-        """NOT RPYTHON"""
+        """NOT_RPYTHON"""
 
         return "<String value='%s'>" % self.value
 
@@ -91,8 +91,26 @@ class Message(Object):
         self.args = args
         self.value = value
 
+    def getname(self):
+        return self.name
+
+    def setname(self, name):
+        self.name = name
+
+    def getargs(self):
+        return self.args
+
+    def setargs(self, args):
+        self.args = args
+
+    def getvalue(self):
+        return self.value
+
+    def setvalue(self, value):
+        self.value = value
+
     def __repr__(self):
-        """NOT RPYTHON"""
+        """NOT_RPYTHON"""
 
         return "Message(%s, args=%r, value=%r)" % (
             self.name, self.args, self.value
@@ -105,13 +123,13 @@ class Message(Object):
         return h
 
     def eval(self, space, receiver, context):
-        if self.name == ";":
+        if self.getname() == ";":
             return context
 
-        if self.value is not None:
-            return self.value
+        if self.getvalue() is not None:
+            return self
 
-        attr = receiver.lookup(self.name)
+        attr = receiver.lookup(self.getname())
         if attr is not None:
             return attr.apply(space, receiver, self, context)
 
@@ -120,5 +138,5 @@ class Message(Object):
             return forward.apply(space, receiver, self, context)
 
         raise AttributeError(
-            "%s has no attribute %s" % (receiver, self.name)
+            "%s has no attribute %s" % (receiver, self.getname())
         )

@@ -43,11 +43,11 @@ def main(argv):
 
     print "Compile:"
     bc = compile(ast)
-    print string_escape_encode(bc.dump(), "'")
+    print bc.repr()
 
     print "Interpret:"
     frame = interpret(bc)
-    for value in frame.stack:
+    for value in filter(None, frame.stack):
         print value
 
     return 0

@@ -19,6 +19,9 @@ class Message(BaseBox):
         self.args = args
         self.value = value
 
+        if self.args and self.value is not None:
+            raise AssertionError("A literal value cannot contain arguments!")
+
         self.next = None
 
     def __repr__(self):
@@ -60,5 +63,22 @@ class Message(BaseBox):
     def setnext(self, next):
         self.next = next
 
+    def getvalue(self):
+        return self.value
+
+    def setvalue(self, value):
+        self.value = value
+
     def compile(self, ctx):
-        ctx.emit(bytecode.LOAD, ctx.register_constant(self.value))
+        next = self
+        while next is not None:
+            if next.getvalue() is not None:
+                ctx.emit(bytecode.LOAD, ctx.register_constant(next.getvalue()))
+
+            for arg in self.getargs():
+                arg.compile(ctx)
+
+            ctx.emit(bytecode.LOAD, ctx.register_constant(next.getname()))
+            ctx.emit(bytecode.EVAL)
+
+            next = next.getnext()

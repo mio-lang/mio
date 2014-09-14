@@ -6,12 +6,11 @@
 """Bytecode"""
 
 
+from pypy.objspace.std.bytesobject import string_escape_encode
+
+
 bytecodes = [
     "LOAD",
-    "PUSH",
-    "GET",
-    "SET",
-    "NEW",
     "EVAL",
     "END",
 ]
@@ -32,7 +31,7 @@ class ByteCode(object):
         self.code = code
         self.constants = constants
 
-    def dump(self):
+    def dump_code(self):
         lines = []
         i = 0
         for i in range(0, len(self.code), 2):
@@ -41,5 +40,22 @@ class ByteCode(object):
             lines.append(bytecodes[ord(c)] + " " + str(ord(c2)))
         return "\n".join(lines)
 
-    def get_repr(self):
-        return "<code object ...>"
+    def dump_constants(self):
+        lines = []
+        i = 0
+        for i in range(0, len(self.constants)):
+            lines.append(
+                str(i) + ": " + string_escape_encode(self.constants[i], "'")
+            )
+        return "\n".join(lines)
+
+    def repr(self):
+        lines = []
+
+        lines.append("Code:")
+        lines.append(self.dump_code())
+
+        lines.append("Constants:")
+        lines.append(self.dump_constants())
+
+        return "\n".join(lines)
