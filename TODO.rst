@@ -4,7 +4,6 @@ ToDo List
 Manually maintained ToDo List.
 
 
-- Fix and complete parser with translation.
 - Implement all bytecode instructions.
 - Implement the runtime environment and core objects.
 - Test Suite
