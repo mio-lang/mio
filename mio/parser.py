@@ -56,7 +56,6 @@ def expressions(state, p):
     return Message("")
 
 
-"""
 @pg.production("expressions : expression expressions")
 def expressions_expression_expressions(state, p):
     print "expressions:", p
@@ -82,6 +81,7 @@ def message_symbol(state, p):
     return p[0]
 
 
+"""
 @pg.production("message : arguments")
 def message_arguments(state, p):
     print "message_arguments:", p
@@ -146,6 +146,7 @@ def arguments_list_expressions_t_comma_arguments_list(state, p):
     assert isList(p[2])
     p[2].insert(0, p[0])
     return p[2]
+"""
 
 
 @pg.production("symbol : T_TERMINATOR")
@@ -163,7 +164,6 @@ def symbol(state, p):
     value = parse_literal(name)
 
     return Message(name, value=value)
-"""
 
 
 @pg.error

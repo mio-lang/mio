@@ -31,12 +31,14 @@ class Message(BaseBox):
 
         next = self
         while next is not None:
-            if next.args:
-                args = "(%s)" % ", ".join([arg.repr() for arg in next.args])
+            if next.getargs():
+                args = "(%s)" % ", ".join(
+                    [arg.repr() for arg in next.getargs()]
+                )
             else:
                 args = ""
-            s.append("%s%s" % (next.name, args))
-            next = next.next
+            s.append("%s%s" % (next.getname(), args))
+            next = next.getnext()
 
         return " ".join(s)
 
@@ -45,6 +47,12 @@ class Message(BaseBox):
 
     def setargs(self, args):
         self.args = args
+
+    def getname(self):
+        return self.name
+
+    def setname(self, name):
+        self.name = name
 
     def getnext(self):
         return self.next
