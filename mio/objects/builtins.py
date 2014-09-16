@@ -8,10 +8,27 @@ class Builtins(Object):
 
 
 @registry.register("builtins", "")
-def noop(space, receiver, context, message):
+def c_noop(space, receiver, context, message):
     """NoOp Message"""
 
 
 @registry.register("builtins")
-def setattr(space, receiver, context, message):
+def c_delattr(space, receiver, context, message):
+    """Delete an attribute on the receiver"""
+
+
+@registry.register("builtins")
+def c_getattr(space, receiver, context, message):
+    """Get an attribute on the receiver"""
+
+
+@registry.register("builtins")
+def c_setattr(space, receiver, context, message):
     """Set an attribute on the receiver"""
+
+
+@registry.register("builtins", "print")
+def c_print(space, receiver, context, message):
+    """Print to standard output"""
+
+    print message.value

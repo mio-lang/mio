@@ -1,3 +1,9 @@
+from rpython.rlib.rsre.rsre_re import match
+from pypy.objspace.std.bytesobject import string_escape_encode
+
+
+from ..tokens import TOKENS
+
 from .object import Object
 
 
@@ -8,6 +14,12 @@ class Message(Object):
         self.name = name
         self.args = args
         self.value = value
+
+        self.terminator = (
+            match(TOKENS["T_TERMINATOR"], self.name)
+            if self.name is not None
+            else False
+        )
 
     def getname(self):
         return self.name
@@ -41,7 +53,7 @@ class Message(Object):
         return h
 
     def eval(self, space, receiver, context):
-        if self.getname() == ";":
+        if self.terminator:
             return context
 
         if self.getvalue() is not None:
@@ -60,5 +72,7 @@ class Message(Object):
             return forward.apply(space, receiver, context, self)
 
         raise AttributeError(
-            "%s has no attribute %s" % (receiver, self.getname())
+            "%s has no attribute %s" % (
+                receiver, string_escape_encode(self.getname(), "'")
+            )
         )
