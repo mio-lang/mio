@@ -1,8 +1,5 @@
-from rpython.rlib.rsre.rsre_re import match
 from pypy.objspace.std.bytesobject import string_escape_encode
 
-
-from ..tokens import TOKENS
 
 from .object import Object
 
@@ -15,11 +12,7 @@ class Message(Object):
         self.args = args
         self.value = value
 
-        self.terminator = (
-            match(TOKENS["T_TERMINATOR"], self.name)
-            if self.name is not None
-            else False
-        )
+        self.terminator = self.name is not None and self.name in "\r\n;"
 
     def getname(self):
         return self.name
