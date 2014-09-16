@@ -4,6 +4,9 @@ ToDo List
 Manually maintained ToDo List.
 
 
+- Fix handling of constant/literal values being parsed, their bytecode
+  and the way they are handled during runtime interpreter evaluation.
+
 - Message tree rewriting.
 
   - ``a = 1`` --> ``setattr("x", 1)``
