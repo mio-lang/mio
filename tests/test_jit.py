@@ -1,5 +1,10 @@
 # -*- encoding: utf-8 -*-
 
+
+import pytest
+pytest.skip("XXX: Not Implemented!")
+
+
 from js import parser
 from js.bytecode import LOAD_VAR, LOAD_CONSTANT_FLOAT, \
     CALL, LOAD_CONSTANT_FN, ASSIGN, DISCARD_TOP, RETURN, BINARY_ADD, \

@@ -1,5 +1,10 @@
 # -*- encoding: utf-8 -*-
 
+
+import pytest
+pytest.skip("XXX: Not Implemented!")
+
+
 from js.bytecode import to_code, ByteCode, \
     LOAD_CONSTANT_FLOAT, RETURN, JUMP_IF_FALSE, JUMP_ABSOLUTE
 from js.interpreter import Frame, interpret, interpret_source

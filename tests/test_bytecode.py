@@ -1,5 +1,9 @@
 # -*- encoding: utf-8 -*-
 
+import pytest
+pytest.skip("XXX: Not Implemented!")
+
+
 from js.parser import ConstantNum, Variable, Assignment, Stmt, Block, \
     BinOp, Call, If, While, FnDef, Return
 from js.bytecode import CompilerContext, dis, to_code, \
