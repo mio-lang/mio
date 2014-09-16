@@ -6,7 +6,8 @@
 """Object Space"""
 
 
-from mio.model import Object, Message, String
+from mio.registry import registry
+from mio.objects import Object, Builtins, Message, String
 
 
 class ObjectSpace(object):
@@ -15,5 +16,9 @@ class ObjectSpace(object):
         self.object = Object(self)
         self.root = Object(self)
 
+        self.builtins = Builtins(self)
+
         self.message = Message(self, None)
         self.string = String(self, "")
+
+        registry.populate(self)

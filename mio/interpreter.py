@@ -10,7 +10,7 @@ from rpython.rlib import jit
 
 
 from mio import bytecode
-from mio.model import Message
+from mio.objects import Message
 from mio.objspace import ObjectSpace
 
 
@@ -59,17 +59,20 @@ class Interpreter(object):
     def __init__(self, bc):
         self.bc = bc
 
+        self.running = False
         self.space = ObjectSpace()
 
     def run(self):
-        frame = Frame()
+        self.running = True
 
         pc = 0
+        frame = Frame()
+
         bc = self.bc
         code = bc.code
         context = self.space.root
 
-        while pc < len(code):
+        while self.running and pc < len(code):
             jitdriver.jit_merge_point(
                 bc=bc, code=code, frame=frame, pc=pc, self=self
             )
@@ -82,7 +85,7 @@ class Interpreter(object):
                 constant = bc.constants[arg]
                 frame.push(Message(self.space, constant, value=constant))
             elif c == bytecode.END:
-                raise SystemExit(0)
+                self.running = False
             elif c == bytecode.EVAL:
                 name = frame.pop().name
                 args = []

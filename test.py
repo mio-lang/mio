@@ -8,21 +8,12 @@ import sys
 from functools import wraps
 
 
-def method(f):
-    @wraps(f)
-    def wrapper(*args):
-        print 'Calling decorated function'
-        return f(*args)
-    return wrapper
-
-
-@method
-def foo(x, y):
-    return x + y
-
-
 def main(argv):
-    print foo(1, 2)
+    d = {"a": 1, "b": 2}
+
+    for k, v in d.iteritems():
+        print k
+        print v
 
     return 0
 

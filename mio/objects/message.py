@@ -49,11 +49,15 @@ class Message(Object):
 
         attr = receiver.lookup(self.getname())
         if attr is not None:
-            return attr.apply(space, receiver, self, context)
+            return attr.apply(space, receiver, context, self)
+
+        attr = space.builtins.lookup(self.getname())
+        if attr is not None:
+            return attr.apply(space, receiver, context, self)
 
         forward = receiver.lookup("forward")
         if forward is not None:
-            return forward.apply(space, receiver, self, context)
+            return forward.apply(space, receiver, context, self)
 
         raise AttributeError(
             "%s has no attribute %s" % (receiver, self.getname())
