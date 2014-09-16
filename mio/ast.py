@@ -24,6 +24,15 @@ class Message(BaseBox):
 
         self.next = None
 
+    def __eq__(self, other):
+        """NOT_RPYTHON"""
+
+        return (
+            self.name == other.name and
+            self.args == other.args and
+            self.value == other.value
+        )
+
     def __repr__(self):
         """NOT_RPYTHON"""
 
