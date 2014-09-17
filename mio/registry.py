@@ -13,7 +13,6 @@ class Registry(object):
         def wrapper(f):
             @wraps(f)
             def wrapped(*args):
-                print "%s called with %s" % (f.__name__, args)
                 return f(*args)
 
             if alias is None:
