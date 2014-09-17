@@ -1,5 +1,8 @@
-from .object import Object  # noqa
-from .string import String  # noqa
-from .message import Message  # noqa
-from .builtins import Builtins  # noqa
-from .cfunction import CFunction  # noqa
+from .object import Object
+from .string import String
+from .number import Number
+from .message import Message
+from .builtins import Builtins
+from .cfunction import CFunction
+
+# pylama:ignore=W0611

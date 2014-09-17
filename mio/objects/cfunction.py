@@ -9,6 +9,9 @@ class CFunction(Object):
         self.name = name
         self.func = func
 
+    def repr(self):
+        return "<CFunctions name='%s'>" % self.name
+
     def hash(self):
         return hash(self.func)
 
@@ -22,8 +25,3 @@ class CFunction(Object):
         # TODO: Evaluate message arguments
         # TODO: Convert between mio and C/RPython types
         return self.func(space, receiver, context, message)
-
-    def __repr__(self):
-        """NOT_RPYTHON"""
-
-        return "<CFunctions name='%s'>" % self.name

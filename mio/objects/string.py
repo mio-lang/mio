@@ -1,3 +1,6 @@
+from pypy.objspace.std.bytesobject import string_escape_encode
+
+
 from .object import Object
 
 
@@ -6,6 +9,9 @@ class String(Object):
     def __init__(self, space, string):
         Object.__init__(self, space, [space.object])
         self.value = string
+
+    def repr(self):
+        return string_escape_encode(self.value, "'")
 
     def hash(self):
         return hash(self.value)
@@ -16,8 +22,3 @@ class String(Object):
     def init(self, value):
         self.value = value
         return self
-
-    def __repr__(self):
-        """NOT_RPYTHON"""
-
-        return "<String value='%s'>" % self.value

@@ -14,6 +14,11 @@ class Message(Object):
 
         self.terminator = self.name is not None and self.name in "\r\n;"
 
+    def repr(self):
+        return "Message(%s, args=%s, value=%s)" % (
+            self.name, self.args, self.value
+        )
+
     def getname(self):
         return self.name
 
@@ -31,13 +36,6 @@ class Message(Object):
 
     def setvalue(self, value):
         self.value = value
-
-    def __repr__(self):
-        """NOT_RPYTHON"""
-
-        return "Message(%s, args=%r, value=%r)" % (
-            self.name, self.args, self.value
-        )
 
     def hash(self):
         h = hash(self.name)
