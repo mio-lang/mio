@@ -15,6 +15,14 @@ class Object(object):
     def __ne__(self, other):
         return not self == other
 
+    def __repr__(self):
+        """NOT_RPYTHON"""
+
+        return self.repr()
+
+    def repr(self):
+        return "<%s attrs=%s>" % (self.__class__.__name__, self.attrs.keys())
+
     def hash(self):
         h = 0
         for attr in self.attrs:
@@ -46,8 +54,3 @@ class Object(object):
 
     def clone(self):
         return Object(self.space, [self])
-
-    def __repr__(self):
-        """NOT_RPYTHON"""
-
-        return "<%s attrs=%s>" % (self.__class__.__name__, self.attrs.keys(),)

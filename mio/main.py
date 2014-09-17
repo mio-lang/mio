@@ -41,11 +41,12 @@ def main(argv):
     ast = parse(lex(source), filename)
     print ast.repr()
 
-    print "Compile:"
+    print "ByteCode:"
     bc = compile(ast)
     print bc.repr()
 
-    interpret(bc)
+    print "Result:"
+    print interpret(bc).repr()
 
     return 0
 

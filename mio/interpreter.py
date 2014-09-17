@@ -71,6 +71,7 @@ class Interpreter(object):
         bc = self.bc
         code = bc.code
         context = self.space.root
+        receiver = self.space.root
 
         while self.running and pc < len(code):
             jitdriver.jit_merge_point(
@@ -92,9 +93,10 @@ class Interpreter(object):
                 while frame.stackp:
                     args.append(frame.pop())
                 message = Message(self.space, name, args)
-                frame.push(message.eval(self.space, context, context))
+                receiver = message.eval(self.space, context, receiver)
             else:
                 assert AssertionError("Unknown Bytecode: %d" % c)
+        return receiver
 
 
 def interpret(bc):

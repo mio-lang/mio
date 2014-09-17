@@ -29,7 +29,6 @@ class Registry(object):
         return wrapper
 
     def populate(self, space):
-        print "populating:"
         for group, attrs in self.registry.iteritems():
             obj = getattr(space, group)
             if obj is not None:
