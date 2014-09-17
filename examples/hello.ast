@@ -1,2 +1,0 @@
-|-Message("print", [Message("Hello World!")])
-  |-Message("\n")
