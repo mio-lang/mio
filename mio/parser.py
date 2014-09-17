@@ -14,12 +14,10 @@ from mio.ast import Message
 from mio.tokens import TOKENS
 
 
-pg = ParserGenerator(
-    TOKENS.keys(),
-    precedence=[
-    ],
-    cache_id=__name__
-)
+pg = ParserGenerator(TOKENS.keys(), cache_id=__name__)
+
+
+null = Message("")
 
 
 def isMessage(x):
@@ -62,7 +60,8 @@ def expressions_expression_expressions(state, p):
 
     assert isMessage(p[0])
     assert isMessage(p[1])
-    p[0].setnext(p[1])
+    if p[1] != null:
+        p[0].setnext(p[1])
     return p[0]
 
 
@@ -115,6 +114,8 @@ def arguments(state, p):
 
     name = p[0].getstr() + p[2].getstr()
     args = p[1].getargs()
+    if args == [null]:
+        args = []
 
     return Message(name, args)
 
