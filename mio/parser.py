@@ -6,7 +6,7 @@
 """Parser"""
 
 
-from rply import Token, ParserGenerator
+from rply import ParserGenerator
 from pypy.objspace.std.bytesobject import string_escape_encode
 
 
@@ -20,32 +20,8 @@ pg = ParserGenerator(TOKENS.keys(), cache_id=__name__)
 null = Message("")
 
 
-def isMessage(x):
-    return isinstance(x, Message)
-
-
-def isToken(x):
-    return isinstance(x, Token)
-
-
-def isList(x):
-    return isinstance(x, list)
-
-
-def isTuple(x):
-    return isinstance(x, tuple)
-
-
-def isString(x):
-    return isinstance(x, str)
-
-
 @pg.production("program : expressions")
 def program(state, p):
-    print "program:", p
-
-    assert isMessage(p[0])
-
     return p[0]
 
 
@@ -56,10 +32,6 @@ def expressions(state, p):
 
 @pg.production("expressions : expression expressions")
 def expressions_expression_expressions(state, p):
-    print "expressions:", p
-
-    assert isMessage(p[0])
-    assert isMessage(p[1])
     if p[1] != null:
         p[0].setnext(p[1])
     return p[0]
@@ -68,37 +40,22 @@ def expressions_expression_expressions(state, p):
 @pg.production("expression : terminator")
 @pg.production("expression : message")
 def expression(state, p):
-    print "expression:", p
-    assert isMessage(p[0])
     return p[0]
 
 
 @pg.production("message : symbol")
 def message_symbol(state, p):
-    print "message_symbol:", p
-
-    assert isMessage(p[0])
     return p[0]
 
 
 @pg.production("message : arguments")
 def message_arguments(state, p):
-    print "message_arguments:", p
-
-    assert isMessage(p[0])
-
     return p[0]
 
 
 @pg.production("message : symbol arguments")
 def message_symbol_arguments(state, p):
-    print "message_symbol_arguments:", p
-
-    assert isMessage(p[0])
-    assert isMessage(p[1])
-
     p[0].setargs(p[1].getargs())
-
     return p[0]
 
 
@@ -106,12 +63,6 @@ def message_symbol_arguments(state, p):
 @pg.production("arguments : T_LBRACE arguments_list T_RBRACE")
 @pg.production("arguments : T_LBRACKET arguments_list T_RBRACKET")
 def arguments(state, p):
-    print "arguments:", p
-
-    assert isToken(p[0])
-    assert isMessage(p[1])
-    assert isToken(p[2])
-
     name = p[0].getstr() + p[2].getstr()
     args = p[1].getargs()
     if args == [null]:
@@ -122,27 +73,16 @@ def arguments(state, p):
 
 @pg.production("arguments_list :")
 def arguments_list(state, p):
-    print "arguments_list:", p
-
     return null
 
 
 @pg.production("arguments_list : expressions")
 def arguments_list_expressions(state, p):
-    print "arguments_list_expressions:", p
-
-    assert isMessage(p[0])
     return Message("", [p[0]])
 
 
 @pg.production("arguments_list : expressions T_COMMA arguments_list")
 def arguments_list_expressions_t_comma_arguments_list(state, p):
-    print "arguments_list_expressions_t_comma_arguments_list:", p
-
-    assert isMessage(p[0])
-    assert isToken(p[1])
-    assert isMessage(p[2])
-
     args = [p[0]] + p[2].getargs()
     p[2].setargs(args)
 
@@ -155,10 +95,6 @@ def arguments_list_expressions_t_comma_arguments_list(state, p):
 @pg.production("symbol : T_STRING")
 @pg.production("symbol : T_COLON")
 def symbol(state, p):
-    print "symbol:", p
-
-    assert isToken(p[0])
-
     name = p[0].getstr()
     value = name if p[0].gettokentype() in ("T_NUMBER", "T_STRING") else None
 
@@ -167,8 +103,6 @@ def symbol(state, p):
 
 @pg.production("terminator : T_TERMINATOR")
 def terminator(state, p):
-    print "terminator:", p
-
     return Message(p[0].getstr())
 
 
