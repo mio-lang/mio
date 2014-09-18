@@ -96,7 +96,9 @@ class Interpreter(object):
                 while frame.stackp:
                     args.insert(0, frame.pop())
                 message = Message(self.space, constant, args)
-                receiver = message.eval(self.space, context, receiver)
+                frame.push(message.eval(self.space, context, receiver))
+            elif c == bytecode.POP:
+                frame.pop()
             elif c == bytecode.END:
                 self.running = False
             else:

@@ -89,9 +89,12 @@ class Message(Node):
             if value is not None:
                 ctx.emit(bytecode.LOAD, ctx.register_constant(value))
             else:
-                for arg in next.getargs():
+                args = next.getargs()
+                for arg in args:
                     arg.compile(ctx)
 
                 ctx.emit(bytecode.EVAL, ctx.register_constant(next.getname()))
+                if not args:
+                    ctx.emit(bytecode.POP)
 
             next = next.getnext()
