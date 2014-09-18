@@ -51,7 +51,7 @@ def program(state, p):
 
 @pg.production("expressions :")
 def expressions(state, p):
-    return Message("")
+    return null
 
 
 @pg.production("expressions : expression expressions")
@@ -124,7 +124,7 @@ def arguments(state, p):
 def arguments_list(state, p):
     print "arguments_list:", p
 
-    return Message("")
+    return null
 
 
 @pg.production("arguments_list : expressions")
@@ -160,7 +160,7 @@ def symbol(state, p):
     assert isToken(p[0])
 
     name = p[0].getstr()
-    value = parse_literal(name)
+    value = name if p[0].gettokentype() in ("T_NUMBER", "T_STRING") else None
 
     return Message(name, value=value)
 
@@ -196,10 +196,6 @@ class ParserState(object):
 
     def __init__(self, filename=None):
         self.filename = filename
-
-
-def parse_literal(value):
-    return value
 
 
 def parse(tokens, filename=None):

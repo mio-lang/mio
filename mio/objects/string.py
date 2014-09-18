@@ -13,6 +13,9 @@ class String(Object):
     def repr(self):
         return string_escape_encode(self.value, "'")
 
+    def str(self):
+        return self.value
+
     def hash(self):
         return hash(self.value)
 

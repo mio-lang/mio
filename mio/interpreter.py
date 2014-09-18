@@ -10,8 +10,9 @@ from rpython.rlib import jit
 
 
 from mio import bytecode
-from mio.objects import Message
+from mio.utils import unquote_string
 from mio.objspace import ObjectSpace
+from mio.objects import Message, Number, String
 
 
 def get_printable_location(pc, code, bc):
@@ -84,16 +85,20 @@ class Interpreter(object):
 
             if c == bytecode.LOAD:
                 constant = bc.constants[arg]
-                frame.push(Message(self.space, constant, value=constant))
-            elif c == bytecode.END:
-                self.running = False
+                if constant[0] in "'\"":
+                    value = String(self.space, unquote_string(constant))
+                else:
+                    value = Number(self.space, float(constant))
+                frame.push(Message(self.space, constant, value=value))
             elif c == bytecode.EVAL:
-                name = frame.pop().name
+                constant = bc.constants[arg]
                 args = []
                 while frame.stackp:
-                    args.append(frame.pop())
-                message = Message(self.space, name, args)
+                    args.insert(0, frame.pop())
+                message = Message(self.space, constant, args)
                 receiver = message.eval(self.space, context, receiver)
+            elif c == bytecode.END:
+                self.running = False
             else:
                 assert AssertionError("Unknown Bytecode: %d" % c)
         return receiver

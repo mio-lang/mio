@@ -47,8 +47,9 @@ class Message(Object):
         if self.terminator:
             return context
 
-        if self.getvalue() is not None:
-            return self
+        value = self.getvalue()
+        if value is not None:
+            return value
 
         attr = receiver.lookup(self.getname())
         if attr is not None:

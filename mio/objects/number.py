@@ -8,6 +8,9 @@ class Number(Object):
         self.value = number
 
     def repr(self):
+        return self.str()
+
+    def str(self):
         return str(self.value)
 
     def hash(self):

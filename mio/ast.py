@@ -12,7 +12,11 @@ from rply.token import BaseBox
 from mio import bytecode
 
 
-class Message(BaseBox):
+class Node(BaseBox):
+    """Base Node"""
+
+
+class Message(Node):
 
     def __init__(self, name, args=[], value=None):
         self.name = name
@@ -69,6 +73,7 @@ class Message(BaseBox):
         return self.next
 
     def setnext(self, next):
+        assert isinstance(next, Message)
         self.next = next
 
     def getvalue(self):
@@ -80,13 +85,13 @@ class Message(BaseBox):
     def compile(self, ctx):
         next = self
         while next is not None:
-            if next.getvalue() is not None:
-                ctx.emit(bytecode.LOAD, ctx.register_constant(next.getvalue()))
+            value = next.getvalue()
+            if value is not None:
+                ctx.emit(bytecode.LOAD, ctx.register_constant(value))
+            else:
+                for arg in next.getargs():
+                    arg.compile(ctx)
 
-            for arg in self.getargs():
-                arg.compile(ctx)
-
-            ctx.emit(bytecode.LOAD, ctx.register_constant(next.getname()))
-            ctx.emit(bytecode.EVAL)
+                ctx.emit(bytecode.EVAL, ctx.register_constant(next.getname()))
 
             next = next.getnext()

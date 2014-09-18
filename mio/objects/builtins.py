@@ -39,6 +39,10 @@ def c_setattr(space, receiver, context, message):
 def c_print(space, receiver, context, message):
     """Print to standard output"""
 
-    print message.value
+    args = []
+    for arg in message.args:
+        args.append(arg.eval(space, context, context).str())
+
+    print " ".join(args)
 
     return receiver
