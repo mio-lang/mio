@@ -1,10 +1,16 @@
+from ..registry import Registry
+
+
 class Object(object):
+
+    registry = Registry()
 
     def __init__(self, space, protos=[]):
         self.space = space
         self.protos = protos
 
         self.attrs = {}
+        self.registry.populate(self, space)
 
     def __eq__(self, other):
         return (

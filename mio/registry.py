@@ -1,15 +1,12 @@
 from functools import wraps
 
 
-from mio.objects.cfunction import CFunction
-
-
 class Registry(object):
 
     def __init__(self):
-        self.registry = {}
+        self.attrs = {}
 
-    def register(self, object, alias=None):
+    def register(self, alias=None):
         def wrapper(f):
             @wraps(f)
             def wrapped(*args):
@@ -20,19 +17,13 @@ class Registry(object):
             else:
                 name = alias
 
-            attrs = self.registry.setdefault(object, {})
-            attrs[name] = wrapped
+            self.attrs[name] = wrapped
 
             return wrapped
 
         return wrapper
 
-    def populate(self, space):
-        for group, attrs in self.registry.iteritems():
-            obj = getattr(space, group)
-            if obj is not None:
-                for name, func in attrs.iteritems():
-                    obj.attrs[name] = CFunction(space, name, func)
-
-
-registry = Registry()
+    def populate(self, obj, space):
+        from mio.objects.cfunction import CFunction
+        for name, func in self.attrs.iteritems():
+            obj.attrs[name] = CFunction(space, name, func)

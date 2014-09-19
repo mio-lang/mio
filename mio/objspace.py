@@ -20,6 +20,3 @@ class ObjectSpace(object):
 
         self.message = Message(self, None)
         self.string = String(self, "")
-
-        from mio.registry import registry
-        registry.populate(self)
