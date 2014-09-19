@@ -76,6 +76,7 @@ As of `690c894 <https://bitbucket.org/miolang/mio/commits/690c894>`_ you can
 now build mio using `Docker`_ and `fig`_.
 
 ::
+    
     $ fig build
 
 
