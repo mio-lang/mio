@@ -17,7 +17,9 @@ This is a minimal I/O Interpreter. This is a rewrite of:
 - https://bitbucket.org/prologic/mio-lang
 
 
-.. note:: Very early development.
+.. warning:: mio is a new programming language in early **Development**.
+
+             DO NOT USE IN PRODUCTION! USE AT YOUR OWN RISK!
 
 
 Prerequisites
@@ -47,7 +49,7 @@ a bit easier.
 Installation
 ------------
 
-Grab the source from https://bitbucket.org/prologic/mio and either
+Grab the source from https://bitbucket.org/miolang/mio and either
 run ``python setup.py develop`` or ``pip install -r requirements.txt``
 
 ::
@@ -61,7 +63,8 @@ Building
 --------
 
 To build the interpreter simply run ``mio/main.py`` against the RPython
-Compiler.
+Compiler. There is a ``Makefile`` that has a default target for building
+and translating the interpreter.
 
 ::
     
