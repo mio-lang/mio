@@ -9,14 +9,14 @@ class Builtins(Object):
 
 
 @registry.register("builtins", "")
-def c_noop(space, receiver, context, message):
+def null(space, receiver, context, message):
     """Null Message"""
 
     return context
 
 
-@registry.register("builtins", "delattr")
-def c_delattr(space, receiver, context, message):
+@registry.register("builtins")
+def delete(space, receiver, context, message):
     """Delete an attribute on the receiver"""
 
     assert len(message.args) == 1
@@ -30,8 +30,8 @@ def c_delattr(space, receiver, context, message):
     return receiver
 
 
-@registry.register("builtins", "getattr")
-def c_getattr(space, receiver, context, message):
+@registry.register("builtins")
+def get(space, receiver, context, message):
     """Get an attribute on the receiver"""
 
     assert len(message.args) == 1
@@ -45,8 +45,8 @@ def c_getattr(space, receiver, context, message):
     return receiver
 
 
-@registry.register("builtins", "setattr")
-def c_setattr(space, receiver, context, message):
+@registry.register("builtins")
+def set(space, receiver, context, message):
     """Set an attribute on the receiver"""
 
     assert len(message.args) == 2
