@@ -1,6 +1,8 @@
 .. _Python: https://www.python.org/
 .. _virtualenv: https://pypy.python.org/pypi/virtualenv
 .. _virtualenvwrapper: https://pypy.python.org/pypi/virtualenvwrapper
+.. _Docker: https://docker.com/
+.. _fig: http://www.fig.sh/
 
 
 Minimal I/O Interpreter
@@ -64,6 +66,12 @@ Compiler.
     
     $ make
 
+As of `690c894 <https://bitbucket.org/miolang/mio/commits/690c894>`_ you can
+now build mio using `Docker`_ and `fig`_.
+
+::
+    $ fig build
+
 
 Usage
 -----
@@ -73,5 +81,18 @@ compiled interpreter ``mio``.
 
 ::
     
-    $ miopy examples/001.mio
-    $ ./bin/mio examples/001.mio
+    $ ./bin/mio examples/hello.mio
+
+You can also run mio untranslated on top of the `Python`_ interpreter
+(*using it's default CPython interpreter*) by running ``miopy``.
+
+::
+    
+    $ miopy examples/hello.mio
+
+As of `690c894 <https://bitbucket.org/miolang/mio/commits/690c894>`_ you can
+now run mio using `Docker`_ and `fig`_.
+
+::
+    
+    $ fig run mio hello.mio
