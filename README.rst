@@ -102,3 +102,29 @@ now run mio using `Docker`_ and `fig`_.
 ::
     
     $ fig run mio hello.mio
+
+
+Grammar
+-------
+
+The grammar of mio is currently as follows:
+
+::
+    
+    program = expressions
+
+    expressions = { expression }
+
+    expression = message | terminator
+
+    message = symbol | arguments | symbol arguments
+
+    arguments = T_LPAREN arguments_list T_RPAREN |
+                T_LBRACE arguments_list T_RBRACE |
+                T_LBRACKET arguments_list T_RBRACKET
+
+    arguments_list = expressions | expressions T_COMMA arguments_list
+
+    symbol = T_IDENTIFIER | T_OPERATOR | T_NUMBER | T_STRING | T_COLON
+
+    terminator = T_TERMINATOR
