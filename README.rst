@@ -40,6 +40,7 @@ a bit easier.
     
     $ hg clone https://bitbucket.org/prologic/pypy
     $ cd pypy
+    $ python setup-pypy develop
     $ python setup-rpython.py develop
 
 
@@ -51,8 +52,8 @@ run ``python setup.py develop`` or ``pip install -r requirements.txt``
 
 ::
     
-    $ hg clone https://bitbucket.org/prologic/mio-lang-rewrite
-    $ cd mio-lang-rewrite
+    $ hg clone https://bitbucket.org/miolang/mio
+    $ cd mio
     $ pip install -r requirements.txt
 
 
