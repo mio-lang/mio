@@ -6,8 +6,8 @@
 Minimal I/O Interpreter
 =======================
 
-.. image:: https://drone.io/bitbucket.org/prologic/mio-lang-rewrite/status.png
-   :target: https://drone.io/bitbucket.org/prologic/mio-lang-rewrite
+.. image:: https://drone.io/bitbucket.org/miolang/mio/status.png
+   :target: https://drone.io/bitbucket.org/miolang/mio
    :alt: Drone.io Build Status
 
 This is a minimal I/O Interpreter. This is a rewrite of:
