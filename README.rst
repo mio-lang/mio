@@ -19,7 +19,9 @@ This is a minimal I/O Interpreter. This is a rewrite of:
 
 .. warning:: mio is a new programming language in early **Development**.
 
-             DO NOT USE IN PRODUCTION! USE AT YOUR OWN RISK!
+             DO NOT USE IN PRODUCTION!
+             
+             USE AT YOUR OWN RISK!
 
 
 Prerequisites
