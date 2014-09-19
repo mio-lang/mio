@@ -83,15 +83,14 @@ now build mio using `Docker`_ and `fig`_.
 Usage
 -----
 
-You can either run the interpreter using `Python`_ itself or running the
-compiled interpreter ``mio``.
+You can either run the interpreter using `Python`_ itself or by running the
+compiled interpreter ``mio`` in ``./bin/mio``.
 
 ::
     
     $ ./bin/mio examples/hello.mio
 
-You can also run mio untranslated on top of the `Python`_ interpreter
-(*using it's default CPython interpreter*) by running ``miopy``.
+Untranslated running on top of `Python`_ (*CPython*):
 
 ::
     
