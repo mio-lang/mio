@@ -93,7 +93,6 @@ def arguments_list_expressions_t_comma_arguments_list(state, p):
 @pg.production("symbol : T_OPERATOR")
 @pg.production("symbol : T_NUMBER")
 @pg.production("symbol : T_STRING")
-@pg.production("symbol : T_COLON")
 def symbol(state, p):
     name = p[0].getstr()
     value = name if p[0].gettokentype() in ("T_NUMBER", "T_STRING") else None

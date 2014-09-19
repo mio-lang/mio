@@ -125,6 +125,6 @@ The grammar of mio is currently as follows:
 
     arguments_list = expressions | expressions T_COMMA arguments_list
 
-    symbol = T_IDENTIFIER | T_OPERATOR | T_NUMBER | T_STRING | T_COLON
+    symbol = T_IDENTIFIER | T_OPERATOR | T_NUMBER | T_STRING
 
     terminator = T_TERMINATOR

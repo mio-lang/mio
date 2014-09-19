@@ -76,7 +76,6 @@ TOKENS["T_RPAREN"] = "\)"
 TOKENS["T_LBRACE"] = "\{"
 TOKENS["T_RBRACE"] = "\}"
 TOKENS["T_COMMA"] = "\,"
-TOKENS["T_COLON"] = "\:"
 
 
 IGNORES = [
