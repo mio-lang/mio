@@ -79,3 +79,74 @@ def test_operators(source, expected):
     actual = list(lex(source))
     assert actual
     assert actual[0] == expected
+
+
+@pytest.mark.parametrize("source,expected", [
+    ("foo",     Token("T_IDENTIFIER", "foo")),
+    ("foo1",    Token("T_IDENTIFIER", "foo1")),
+    ("_foo",    Token("T_IDENTIFIER", "_foo")),
+])
+def test_identifier(source, expected):
+    actual = list(lex(source))
+    assert actual
+    assert actual[0] == expected
+
+
+@pytest.mark.parametrize("source,expected", [
+    ("\r",  Token("T_TERMINATOR", "\r")),
+    ("\n",  Token("T_TERMINATOR", "\n")),
+    (";",   Token("T_TERMINATOR", ";")),
+])
+def test_terminator(source, expected):
+    actual = list(lex(source))
+    assert actual
+    assert actual[0] == expected
+
+
+@pytest.mark.parametrize("source,expected", [
+    ("[",   Token("T_LBRACKET", "[")),
+    ("]",   Token("T_RBRACKET", "]")),
+])
+def test_brackets(source, expected):
+    actual = list(lex(source))
+    assert actual
+    assert actual[0] == expected
+
+
+@pytest.mark.parametrize("source,expected", [
+    ("(",   Token("T_LPAREN", "(")),
+    (")",   Token("T_RPAREN", ")")),
+])
+def test_parens(source, expected):
+    actual = list(lex(source))
+    assert actual
+    assert actual[0] == expected
+
+
+@pytest.mark.parametrize("source,expected", [
+    ("{",   Token("T_LBRACE", "{")),
+    ("}",   Token("T_RBRACE", "}")),
+])
+def test_braces(source, expected):
+    actual = list(lex(source))
+    assert actual
+    assert actual[0] == expected
+
+
+@pytest.mark.parametrize("source,expected", [
+    (",", Token("T_COMMA", ",")),
+])
+def test_comma(source, expected):
+    actual = list(lex(source))
+    assert actual
+    assert actual[0] == expected
+
+
+@pytest.mark.parametrize("source,expected", [
+    ("//foo",   []),
+    ("#foo",    []),
+    ("/*foo*/", []),
+])
+def test_ignores(source, expected):
+    actual = list(lex(source))
+    assert actual == expected

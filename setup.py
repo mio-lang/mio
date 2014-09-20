@@ -11,5 +11,6 @@ setup(
     name="mio",
     version="0.0.1",
     packages=find_packages(),
-    scripts=glob("bin/*")
+    scripts=glob("bin/*"),
+    test_suite="tests.main.main",
 )
