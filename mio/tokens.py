@@ -66,8 +66,8 @@ strre = strre.format(**quotes[3])
 
 TOKENS["T_STRING"] = strre
 TOKENS["T_NUMBER"] = r"(-?(0|([1-9][0-9]*))(\.[0-9]+)?([Ee]-?[0-9]+)?)"
-TOKENS["T_IDENTIFIER"] = r"[A-Za-z_][A-Za-z0-9_]*"
 TOKENS["T_OPERATOR"] = "|".join(map(escape, operators))
+TOKENS["T_IDENTIFIER"] = r"[A-Za-z_][A-Za-z0-9_]*"
 TOKENS["T_TERMINATOR"] = r"[;\n\r]"
 TOKENS["T_LBRACKET"] = "\["
 TOKENS["T_RBRACKET"] = "\]"
