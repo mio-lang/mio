@@ -1,4 +1,4 @@
-.PHONY: clean docs mio
+.PHONY: clean docs mio test
 
 all: mio
 
@@ -12,3 +12,6 @@ docs:
 
 mio:
 	@rpython mio/main.py
+
+test:
+	@python -m tests.main

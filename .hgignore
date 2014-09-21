@@ -8,4 +8,6 @@ build
 .cache
 *.py[co]
 *.sw[po]
+coverage
+.coverage*
 *.egg-info
