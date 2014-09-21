@@ -1,0 +1,3 @@
+pytest
+-e git+https://github.com/alex/rply.git#egg=rply
+-e .
