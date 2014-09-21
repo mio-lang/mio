@@ -85,25 +85,30 @@ class Interpreter(object):
 
             if c == bytecode.LOAD:
                 constant = bc.constants[arg]
-                if constant[0] in "'\"":
+                if constant[0].isdigit() or constant[0] == "-":
+                    value = Number(self.space, float(constant))
+                elif constant[0] in "'\"":
                     value = String(self.space, unquote_string(constant))
                 else:
-                    value = Number(self.space, float(constant))
+                    value = None
                 frame.push(Message(self.space, constant, value=value))
             elif c == bytecode.EVAL:
-                constant = bc.constants[arg]
-                args = []
-                while frame.stackp:
-                    args.insert(0, frame.pop())
-                message = Message(self.space, constant, args)
+                message = frame.pop()
+                message.setargs(pop_args(frame, arg))
                 frame.push(message.eval(self.space, context, receiver))
-            elif c == bytecode.POP:
-                frame.pop()
             elif c == bytecode.END:
                 self.running = False
             else:
                 assert AssertionError("Unknown Bytecode: %d" % c)
         return receiver
+
+
+@jit.unroll_safe
+def pop_args(frame, n):
+    args = []
+    for _ in xrange(n):
+        args.insert(0, frame.pop())
+    return args
 
 
 def interpret(bc):

@@ -10,10 +10,8 @@ from pypy.objspace.std.bytesobject import string_escape_encode
 
 
 bytecodes = [
-    "PUSH",
     "LOAD",
     "EVAL",
-    "POP",
     "END",
 ]
 

@@ -20,7 +20,7 @@ class String(Object):
         return hash(self.value)
 
     def clone(self):
-        return String(self.space, self.value, [self])
+        return String(self.space, self.value)
 
     def init(self, value):
         self.value = value

@@ -1,5 +1,7 @@
 from ..registry import Registry
 
+
+from .method import Method
 from .object import Object
 from .message import Message
 
@@ -51,7 +53,7 @@ class Builtins(Object):
 
         args = message.args
         name = args[0].eval(space, context, context).str()
-        value = args[1].eval(space, context, context)
+        value = args[1]
 
         receiver.attrs[name] = value
 
@@ -69,5 +71,19 @@ class Builtins(Object):
                 args.append(arg.str())
 
         print " ".join(args)
+
+        return receiver
+
+    @registry.register()
+    def method(self, space, receiver, context, message):
+        """Creates a new Method object"""
+
+        if len(message.args) == 1:
+            body = message.args[0]
+            args = []
+        else:
+            raise AssertionError("Not Implemented")
+
+        return Method(space, body, args=args)
 
         return receiver

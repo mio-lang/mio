@@ -17,7 +17,7 @@ class Number(Object):
         return hash(self.value)
 
     def clone(self):
-        return Number(self.space, self.value, [self])
+        return Number(self.space, self.value)
 
     def init(self, value):
         self.value = value

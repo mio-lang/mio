@@ -21,7 +21,7 @@ class CFunction(Object):
     def init(self, name, func):
         return self
 
-    def apply(self, space, receiver, context, message):
+    def call(self, space, receiver, context, message):
         # TODO: Evaluate message arguments
         # TODO: Convert between mio and C/RPython types
         return self.func(receiver, space, receiver, context, message)

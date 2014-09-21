@@ -55,7 +55,7 @@ class Object(object):
             if t is not None:
                 return t
 
-    def apply(self, space, receiver, context, message):
+    def call(self, space, receiver, context, message):
         return self
 
     def clone(self):

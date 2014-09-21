@@ -93,8 +93,7 @@ class Message(Node):
                 for arg in args:
                     arg.compile(ctx)
 
-                ctx.emit(bytecode.EVAL, ctx.register_constant(next.getname()))
-                if not args:
-                    ctx.emit(bytecode.POP)
+                ctx.emit(bytecode.LOAD, ctx.register_constant(next.getname()))
+                ctx.emit(bytecode.EVAL, len(args))
 
             next = next.getnext()
