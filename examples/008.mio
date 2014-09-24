@@ -1,0 +1,2 @@
+set("foo", method(1))
+print(foo())
