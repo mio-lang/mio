@@ -109,8 +109,8 @@ class Interpreter(object):
 def pop_args(frame, n):
     args = []
     for _ in xrange(n):
-        args.append(frame.pop())
-    return args[::-1]
+        args.insert(0, frame.pop())
+    return args
 
 
 def interpret(bc):
