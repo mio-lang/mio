@@ -82,18 +82,20 @@ class Message(Node):
     def setvalue(self, value):
         self.value = value
 
-    def compile(self, ctx):
+    def compile(self, ctx, eval=True):
         next = self
         while next is not None:
             value = next.getvalue()
             if value is not None:
                 ctx.emit(bytecode.LOAD, ctx.register_constant(value))
             else:
+                ctx.emit(bytecode.LOAD, ctx.register_constant(next.getname()))
+
                 args = next.getargs()
                 for arg in args:
-                    arg.compile(ctx)
+                    arg.compile(ctx, False)
 
-                ctx.emit(bytecode.LOAD, ctx.register_constant(next.getname()))
-                ctx.emit(bytecode.EVAL, len(args))
+                if eval or args:
+                    ctx.emit(bytecode.EVAL, len(args))
 
             next = next.getnext()

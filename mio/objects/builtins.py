@@ -78,11 +78,10 @@ class Builtins(Object):
     def method(self, space, receiver, context, message):
         """Creates a new Method object"""
 
-        if len(message.args) == 1:
-            body = message.args[0]
-            args = []
-        else:
-            raise AssertionError("Not Implemented")
+        assert len(message.args) >= 1
+
+        body = message.args[-1]
+        args = message.args[:-1] if len(message.args) > 1 else []
 
         return Method(space, body, args=args)
 

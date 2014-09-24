@@ -85,7 +85,8 @@ class Interpreter(object):
 
             if c == bytecode.LOAD:
                 constant = bc.constants[arg]
-                if constant[0].isdigit() or constant[0] == "-":
+                c = constant[0]
+                if c == "-" or c.isdigit():
                     value = Number(self.space, float(constant))
                 elif constant[0] in "'\"":
                     value = String(self.space, unquote_string(constant))
@@ -93,8 +94,9 @@ class Interpreter(object):
                     value = None
                 frame.push(Message(self.space, constant, value=value))
             elif c == bytecode.EVAL:
+                args = pop_args(frame, arg)
                 message = frame.pop()
-                message.setargs(pop_args(frame, arg))
+                message.setargs(args)
                 frame.push(message.eval(self.space, context, receiver))
             elif c == bytecode.END:
                 self.running = False
@@ -107,8 +109,8 @@ class Interpreter(object):
 def pop_args(frame, n):
     args = []
     for _ in xrange(n):
-        args.insert(0, frame.pop())
-    return args
+        args.append(frame.pop())
+    return args[::-1]
 
 
 def interpret(bc):
