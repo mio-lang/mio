@@ -10,8 +10,9 @@ from rply import ParserGenerator
 from pypy.objspace.std.bytesobject import string_escape_encode
 
 
-from mio.ast import Message
-from mio.tokens import TOKENS
+from .ast import Message
+from .tokens import TOKENS
+from .errors import SyntaxError
 
 
 pg = ParserGenerator(TOKENS.keys(), cache_id=__name__)
@@ -114,7 +115,7 @@ def error(state, token):
     else:
         col, line = str(sourcepos.colno), str(sourcepos.lineno)
 
-    raise ValueError(
+    raise SyntaxError(
         "Unexpected token <%s %s> at %s:%s:%s" % (
             token.gettokentype(), string_escape_encode(token.getstr(), "'"),
             state.filename, line, col

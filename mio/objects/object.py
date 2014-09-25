@@ -26,6 +26,9 @@ class Object(object):
 
         return self.repr()
 
+    def __str__(self):
+        return self.str()
+
     def repr(self):
         return "<%s attrs=%s>" % (self.__class__.__name__, self.attrs.keys())
 

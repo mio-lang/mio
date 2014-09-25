@@ -9,10 +9,11 @@
 from rpython.rlib import jit
 
 
-from mio import bytecode
-from mio.utils import unquote_string
-from mio.objspace import ObjectSpace
-from mio.objects import Message, Number, String
+from . import bytecode
+from .errors import Error
+from .utils import unquote_string
+from .objspace import ObjectSpace
+from .objects import Message, Number, String
 
 
 def get_printable_location(pc, code, bc):
@@ -68,31 +69,35 @@ class Interpreter(object):
         receiver = self.space.root
 
         while pc < len(code):
-            jitdriver.jit_merge_point(
-                bc=bc, code=code, frame=frame, pc=pc, self=self
-            )
+            try:
+                jitdriver.jit_merge_point(
+                    bc=bc, code=code, frame=frame, pc=pc, self=self
+                )
 
-            c = ord(code[pc])
-            arg = ord(code[pc + 1])
-            pc += 2
+                c = ord(code[pc])
+                arg = ord(code[pc + 1])
+                pc += 2
 
-            if c == bytecode.LOAD:
-                constant = bc.constants[arg]
-                c = constant[0]
-                if c == "-" or c.isdigit():
-                    value = Number(self.space, float(constant))
-                elif constant[0] in "'\"":
-                    value = String(self.space, unquote_string(constant))
+                if c == bytecode.LOAD:
+                    constant = bc.constants[arg]
+                    c = constant[0]
+                    if c == "-" or c.isdigit():
+                        value = Number(self.space, float(constant))
+                    elif constant[0] in "'\"":
+                        value = String(self.space, unquote_string(constant))
+                    else:
+                        value = None
+                    frame.push(Message(self.space, constant, value=value))
+                elif c == bytecode.EVAL:
+                    args = pop_args(frame, arg)
+                    message = frame.pop()
+                    message.args = args
+                    frame.push(message.eval(self.space, receiver))
                 else:
-                    value = None
-                frame.push(Message(self.space, constant, value=value))
-            elif c == bytecode.EVAL:
-                args = pop_args(frame, arg)
-                message = frame.pop()
-                message.args = args
-                frame.push(message.eval(self.space, receiver))
-            else:
-                assert AssertionError("Unknown Bytecode: %d" % c)
+                    assert AssertionError("Unknown Bytecode: %d" % c)
+            except Error as e:
+                print e
+                return
 
         return frame.pop()
 

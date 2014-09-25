@@ -1,6 +1,8 @@
 from pypy.objspace.std.bytesobject import string_escape_encode
 
 
+from ..errors import LookupError
+
 from .object import Object
 
 
@@ -56,7 +58,7 @@ class Message(Object):
         if forward is not None:
             return forward.call(space, receiver, context, self)
 
-        raise AttributeError(
+        raise LookupError(
             "%s has no attribute %s" % (
                 receiver, string_escape_encode(name, "'")
             )

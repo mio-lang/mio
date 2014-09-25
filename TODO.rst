@@ -14,5 +14,3 @@ Manually maintained ToDo List.
 
   - ``1 + 2 * 3``   --> ``(1 + (2 * 3))``
   - ``(1 + 2) * 3`` --> ``((1 + 2) * 3)``
-
-- Exception Handling
