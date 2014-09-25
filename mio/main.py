@@ -62,7 +62,8 @@ def repl():
         bc = compile(ast)
 
         result = interpreter.run(bc)
-        print result.repr()
+        if result is not None:
+            print result.repr()
     return 0
 
 

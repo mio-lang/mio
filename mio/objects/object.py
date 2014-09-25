@@ -5,9 +5,9 @@ class Object(object):
 
     registry = Registry()
 
-    def __init__(self, space, protos=[]):
+    def __init__(self, space, parent=None):
         self.space = space
-        self.protos = protos
+        self.parent = parent
 
         self.attrs = {}
         self.registry.populate(self, space)
@@ -29,34 +29,24 @@ class Object(object):
     def repr(self):
         return "<%s attrs=%s>" % (self.__class__.__name__, self.attrs.keys())
 
+    def str(self):
+        return self.repr()
+
     def hash(self):
-        h = 0
-        for attr in self.attrs:
-            h += attr.hash()
-        for proto in self.protos:
-            h += hash(proto)
+        return sum(map(hash, self.attrs + [self.parent]))
 
-        return h
-
-    def lookup(self, name, seen=None):
-        if seen is None:
-            seen = {}
-        else:
-            if self in seen:
-                return None
-        seen[self] = None
-
+    def lookup(self, name):
         try:
             return self.attrs[name]
         except KeyError:
-            pass
-        for x in self.protos:
-            t = x.lookup(name, seen)
-            if t is not None:
-                return t
+            if self.parent is not None:
+                return self.parent.lookup(name)
 
     def call(self, space, receiver, context, message):
         return self
 
     def clone(self):
-        return Object(self.space, [self])
+        return Object(self.space, parent=self)
+
+    def eval(self, space, receiver, context=None):
+        return self

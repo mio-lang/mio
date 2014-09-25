@@ -65,7 +65,6 @@ class Interpreter(object):
         frame = Frame()
 
         code = bc.code
-        context = self.space.root
         receiver = self.space.root
 
         while pc < len(code):
@@ -90,11 +89,12 @@ class Interpreter(object):
             elif c == bytecode.EVAL:
                 args = pop_args(frame, arg)
                 message = frame.pop()
-                message.setargs(args)
-                frame.push(message.eval(self.space, context, receiver))
+                message.args = args
+                frame.push(message.eval(self.space, receiver))
             else:
                 assert AssertionError("Unknown Bytecode: %d" % c)
-        return receiver
+
+        return frame.pop()
 
 
 @jit.unroll_safe

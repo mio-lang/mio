@@ -6,8 +6,10 @@ from .object import Object
 
 class Message(Object):
 
-    def __init__(self, space, name, args=[], value=None):
-        Object.__init__(self, space, [space.object])
+    def __init__(self, space, name, args=[], value=None, parent=None):
+        parent = space.object if parent is None else parent
+        Object.__init__(self, space, parent=parent)
+
         self.name = name
         self.args = args
         self.value = value
@@ -19,43 +21,34 @@ class Message(Object):
             self.name, self.args, self.value
         )
 
-    def getname(self):
-        return self.name
-
-    def setname(self, name):
-        self.name = name
-
-    def getargs(self):
-        return self.args
-
-    def setargs(self, args):
-        self.args = args
-
-    def getvalue(self):
-        return self.value
-
-    def setvalue(self, value):
-        self.value = value
-
     def hash(self):
         h = hash(self.name)
         for arg in self.args:
             h += arg.hash()
         return h
 
-    def eval(self, space, receiver, context):
+    def clone(self):
+        return Message(
+            self.space, self.name, self.args,
+            value=self.value, parent=self
+        )
+
+    def eval(self, space, receiver, context=None):
+        context = receiver if context is None else context
+
         if self.terminator:
             return context
 
-        value = self.getvalue()
-        if value is not None:
-            return value
+        name, value = self.name, self.value
 
-        attr = receiver.lookup(self.getname())
+        if value is not None:
+            return self.value
+
+        attr = receiver.lookup(name)
         if attr is not None:
             return attr.call(space, receiver, context, self)
 
-        attr = space.builtins.lookup(self.getname())
+        attr = space.builtins.lookup(name)
         if attr is not None:
             return attr.call(space, receiver, context, self)
 
@@ -65,6 +58,6 @@ class Message(Object):
 
         raise AttributeError(
             "%s has no attribute %s" % (
-                receiver, string_escape_encode(self.getname(), "'")
+                receiver, string_escape_encode(name, "'")
             )
         )

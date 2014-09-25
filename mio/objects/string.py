@@ -6,9 +6,11 @@ from .object import Object
 
 class String(Object):
 
-    def __init__(self, space, string):
-        Object.__init__(self, space, [space.object])
-        self.value = string
+    def __init__(self, space, value, parent=None):
+        parent = space.object if parent is None else parent
+        Object.__init__(self, space, parent=parent)
+
+        self.value = value
 
     def repr(self):
         return string_escape_encode(self.value, "'")
@@ -20,8 +22,4 @@ class String(Object):
         return hash(self.value)
 
     def clone(self):
-        return String(self.space, self.value)
-
-    def init(self, value):
-        self.value = value
-        return self
+        return String(self.space, self.value, parent=self)

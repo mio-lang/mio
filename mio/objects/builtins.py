@@ -15,8 +15,6 @@ class Builtins(Object):
     def null(self, space, receiver, context, message):
         """Null Message"""
 
-        return context
-
     @registry.register()
     def delete(self, space, receiver, context, message):
         """Delete an attribute on the receiver"""
@@ -24,12 +22,10 @@ class Builtins(Object):
         assert len(message.args) == 1
 
         args = message.args
-        name = args[0].eval(space, context, context).str()
+        name = args[0].eval(space, context).str()
 
         if name in receiver.attrs:
             del receiver.attrs[name]
-
-        return receiver
 
     @registry.register()
     def get(self, space, receiver, context, message):
@@ -38,12 +34,10 @@ class Builtins(Object):
         assert len(message.args) == 1
 
         args = message.args
-        name = args[0].eval(space, context, context).str()
+        name = args[0].eval(space, context).str()
 
         if name in receiver.attrs:
             return receiver.attrs[name]
-
-        return receiver
 
     @registry.register()
     def set(self, space, receiver, context, message):
@@ -52,12 +46,12 @@ class Builtins(Object):
         assert len(message.args) == 2
 
         args = message.args
-        name = args[0].eval(space, context, context).str()
-        value = args[1]
+        name = args[0].eval(space, context).str()
+        value = args[1].eval(space, context)
 
         receiver.attrs[name] = value
 
-        return receiver
+        return value
 
     @registry.register("print")
     def c_print(self, space, receiver, context, message):
@@ -66,13 +60,11 @@ class Builtins(Object):
         args = []
         for arg in message.args:
             if isinstance(arg, Message):
-                args.append(arg.eval(space, context, context).str())
+                args.append(arg.eval(space, context).str())
             else:
                 args.append(arg.str())
 
         print " ".join(args)
-
-        return receiver
 
     @registry.register()
     def method(self, space, receiver, context, message):
@@ -84,5 +76,3 @@ class Builtins(Object):
         args = message.args[:-1] if len(message.args) > 1 else []
 
         return Method(space, body, args=args)
-
-        return receiver
