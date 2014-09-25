@@ -11,8 +11,6 @@ from rpython.jit.codewriter.policy import JitPolicy
 from rpython.rlib.objectmodel import we_are_translated
 from rpython.rlib.streamio import fdopen_as_stream, open_file_as_stream
 
-from pypy.objspace.std.bytesobject import string_escape_encode
-
 
 if not we_are_translated():
     # We can have better repl when running on top of CPython
@@ -27,7 +25,11 @@ from mio.compiler import compile
 from mio.interpreter import interpret, Interpreter
 
 
-def repl():
+class Options(object):
+    """Options Container"""
+
+
+def repl(debug=False):
     stdin = fdopen_as_stream(0, "r")
     stdout = fdopen_as_stream(1, "a")
 
@@ -53,51 +55,49 @@ def repl():
         if not s:
             continue  # Handle plain ENTER
 
-        tokens = lex(s)
-        if not tokens:
-            continue  # handle whitespace in RPy
-
-        ast = parse(tokens)
+        ast = parse(lex(s))
+        if debug:
+            print ast.repr()
 
         bc = compile(ast)
+        if debug:
+            print bc.repr()
 
         result = interpreter.run(bc)
         if result is not None:
             print result.repr()
+
     return 0
 
 
-def run(filename):
+def run(filename, debug=False):
     f = open_file_as_stream(filename)
     source = f.readall()
     f.close()
 
-    print "Tokens:"
-    tokens = lex(source)
-
-    for token in tokens:
-        print "<Token (%s, %s)>" % (
-            token.name,
-            string_escape_encode(token.value, "'")
-        )
-
-    print "AST:"
     ast = parse(lex(source), filename)
-    print ast.repr()
+    if debug:
+        print ast.repr()
 
-    print "ByteCode:"
     bc = compile(ast)
-    print bc.repr()
+    if debug:
+        print bc.repr()
 
-    print "Result:"
-    print interpret(bc).repr()
+    result = interpret(bc)
+    if result is not None:
+        print result
 
     return 0
 
 
 def usage(prog):
-    print "Usage: %s [option] ... [file] [arg] ..." % prog
-    print "Options and arguments (and corresponding environment variables):"
+    print "Usage: %s [options] [file]" % prog
+    return 0
+
+
+def help():
+    print "Options and Arguments:"
+    print "  -d debug output"
     print "  -h to display this help"
     print "  -v to display the version"
     return 0
@@ -108,20 +108,49 @@ def version():
     return 0
 
 
+def parse_bool_arg(name, argv, default=False):
+    for i in xrange(len(argv)):
+        if argv[i] == name:
+            del argv[i]
+            return True
+    return default
+
+
+def parse_arg(name, argv, default=""):
+    for i in xrange(len(argv)):
+        if argv[i] == name:
+            del argv[i]
+            return argv.pop(i)
+    return default
+
+
+def parse_args(argv):
+    opts = Options()
+
+    opts.debug = parse_bool_arg('-d', argv)
+    opts.help = parse_bool_arg("-h", argv)
+    opts.version = parse_bool_arg("-v", argv)
+
+    del argv[0]
+
+    return opts, argv
+
+
 def main(argv):
     prog = basename(argv[0])
+    opts, args = parse_args(argv)
 
-    if len(argv) == 1:
-        return repl()
-    elif len(argv) == 2:
-        if argv[1] == "-h":
-            return usage(prog)
-        elif argv[1] == "-v":
-            return version()
-        else:
-            return run(argv[1])
+    if opts.help:
+        usage(prog)
+        return help()
 
-    return usage(prog)
+    if opts.version:
+        return version()
+
+    if args:
+        return run(args[0], debug=opts.debug)
+
+    return repl(debug=opts.debug)
 
 
 def target(driver, args):
