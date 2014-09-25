@@ -96,7 +96,7 @@ class Interpreter(object):
                 else:
                     assert AssertionError("Unknown Bytecode: %d" % c)
             except Error as e:
-                print e
+                print e.repr()
                 return
 
         return frame.pop()

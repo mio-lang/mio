@@ -22,8 +22,6 @@ class Object(object):
         return not self == other
 
     def __repr__(self):
-        """NOT_RPYTHON"""
-
         return self.repr()
 
     def __str__(self):

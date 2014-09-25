@@ -60,6 +60,6 @@ class Message(Object):
 
         raise LookupError(
             "%s has no attribute %s" % (
-                receiver, string_escape_encode(name, "'")
+                receiver.repr(), string_escape_encode(name, "'")
             )
         )
