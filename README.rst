@@ -3,6 +3,7 @@
 .. _virtualenvwrapper: https://pypy.python.org/pypi/virtualenvwrapper
 .. _Docker: https://docker.com/
 .. _fig: http://www.fig.sh/
+.. _Latest Build: https://drone.io/bitbucket.org/miolang/mio/files
 
 
 Minimal I/O Interpreter
@@ -59,6 +60,8 @@ run ``python setup.py develop`` or ``pip install -r requirements.txt``
     $ hg clone https://bitbucket.org/miolang/mio
     $ cd mio
     $ pip install -r requirements.txt
+
+You can also download the `Latest Build`_
 
 
 Building
