@@ -53,6 +53,13 @@ class Frame(object):
         self.stackp = new_pos
         return value
 
+    @jit.unroll_safe
+    def pop_args(self, n):
+        args = []
+        for _ in xrange(n):
+            args.insert(0, self.pop())
+        return args
+
 
 class Interpreter(object):
 
@@ -89,7 +96,7 @@ class Interpreter(object):
                         value = None
                     frame.push(Message(self.space, constant, value=value))
                 elif c == bytecode.EVAL:
-                    args = pop_args(frame, arg)
+                    args = frame.pop_args(arg)
                     message = frame.pop()
                     message.args = args
                     frame.push(message.eval(self.space, receiver))
@@ -100,14 +107,6 @@ class Interpreter(object):
                 return
 
         return frame.pop()
-
-
-@jit.unroll_safe
-def pop_args(frame, n):
-    args = []
-    for _ in xrange(n):
-        args.insert(0, frame.pop())
-    return args
 
 
 def interpret(bc):
