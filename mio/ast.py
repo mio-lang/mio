@@ -86,12 +86,13 @@ class Message(Node):
         next = self
         while next is not None:
             args = next.getargs()
+            name = next.getname()
             value = next.getvalue()
 
             if value is not None:
                 ctx.emit(bytecode.LOAD, ctx.register_constant(value))
             else:
-                ctx.emit(bytecode.LOAD, ctx.register_constant(next.getname()))
+                ctx.emit(bytecode.LOAD, ctx.register_constant(name))
 
                 for arg in args:
                     arg.compile(ctx, False)
