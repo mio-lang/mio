@@ -1,6 +1,5 @@
 from ..registry import Registry
 
-
 from .method import Method
 from .object import Object
 from .message import Message
@@ -68,7 +67,18 @@ class Builtins(Object):
 
     @registry.register()
     def method(self, space, receiver, context, message):
-        """Creates a new Method object"""
+        """Create a new bound Method Object"""
+
+        assert len(message.args) >= 1
+
+        body = message.args[-1]
+        args = message.args[:-1] if len(message.args) > 1 else []
+
+        return Method(space, body, args=args, binding=receiver)
+
+    @registry.register()
+    def block(self, space, receiver, context, message):
+        """Create a new unbound Method Object"""
 
         assert len(message.args) >= 1
 
