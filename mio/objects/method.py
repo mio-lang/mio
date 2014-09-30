@@ -80,6 +80,6 @@ class Method(Object):
 
         assert len(message.args) == 1
 
-        self.binding = message.args[0].eval(context)
+        self.binding = message.args[0].eval(space, context)
 
         return self
