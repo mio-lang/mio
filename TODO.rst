@@ -4,6 +4,7 @@ TODO
 Manually maintained ToDo List.
 
 
+- Refactor Interpreter.
 - Message tree rewriting.
 
   - ``a = 1``       --> ``set("x", 1)``

@@ -53,6 +53,12 @@ class Frame(object):
         self.stackp = new_pos
         return value
 
+    def peek(self):
+        return self.stack[(self.stackp - 1)]
+
+    def empty(self):
+        return self.stackp == 0
+
     @jit.unroll_safe
     def pop_args(self, n):
         args = []
@@ -68,8 +74,11 @@ class Interpreter(object):
     def __init__(self):
         self.space = ObjectSpace()
 
-    def run(self, bc):
+    def run(self, bc):  # noqa
+        # TODO: Refactor
+
         pc = 0
+        rs = Frame()
         frame = Frame()
 
         code = bc.code
@@ -96,17 +105,24 @@ class Interpreter(object):
                         value = None
                     frame.push(Message(self.space, constant, value=value))
                 elif c == bytecode.EVAL:
+                    if not rs.empty():
+                        receiver = rs.pop()
+
                     args = frame.pop_args(arg)
                     message = frame.pop()
                     message.args = args
-                    frame.push(message.eval(self.space, receiver))
+                    result = message.eval(self.space, receiver)
+                    frame.push(result)
+                    rs.push(result)
+                elif c == bytecode.POPRS:
+                    rs.pop()
                 else:
                     assert AssertionError("Unknown Bytecode: %d" % c)
             except Error as e:
                 print e.repr()
                 return
 
-        return frame.pop()
+        return receiver if rs.empty() else rs.pop()
 
 
 def interpret(bc):

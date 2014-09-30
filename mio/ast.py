@@ -99,5 +99,7 @@ class Message(Node):
 
             if eval or args:
                 ctx.emit(bytecode.EVAL, len(args))
+                if not eval:
+                    ctx.emit(bytecode.POPRS)
 
             next = next.getnext()
