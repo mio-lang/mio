@@ -58,11 +58,7 @@ def repl(debug=False):
     return 0
 
 
-def run(filename, debug=False):
-    f = open_file_as_stream(filename)
-    source = f.readall()
-    f.close()
-
+def runsource(source, filename="<stdin>", debug=False):
     ast = parse(lex(source), filename)
     if debug:
         print ast.repr()
@@ -78,6 +74,14 @@ def run(filename, debug=False):
     return 0
 
 
+def runfile(filename, debug=False):
+    f = open_file_as_stream(filename)
+    source = f.readall()
+    f.close()
+
+    return runsource(source, filename=filename, debug=debug)
+
+
 def usage(prog):
     print "Usage: %s [options] [file]" % prog
     return 0
@@ -86,6 +90,7 @@ def usage(prog):
 def help():
     print "Options and Arguments:"
     print "  -d debug output"
+    print "  -e evaluate string"
     print "  -h to display this help"
     print "  -v to display the version"
     return 0
@@ -116,6 +121,7 @@ def parse_args(argv):
     opts = Options()
 
     opts.debug = parse_bool_arg('-d', argv)
+    opts.eval = parse_arg("-e", argv)
     opts.help = parse_bool_arg("-h", argv)
     opts.version = parse_bool_arg("-v", argv)
 
@@ -136,9 +142,11 @@ def main(argv):
         return version()
 
     if args:
-        return run(args[0], debug=opts.debug)
-
-    return repl(debug=opts.debug)
+        return runfile(args[0], debug=opts.debug)
+    elif opts.eval:
+        return runsource(opts.eval)
+    else:
+        return repl(debug=opts.debug)
 
 
 def target(driver, args):
