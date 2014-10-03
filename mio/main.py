@@ -147,7 +147,8 @@ def main(argv):
         status = runfile(args[0], debug=opts.debug)
         return repl(debug=opts.debug) if opts.inspect else status
     elif opts.eval:
-        return runsource(opts.eval)
+        status = runsource(opts.eval, debug=opts.debug)
+        return repl(debug=opts.debug) if opts.inspect else status
     else:
         return repl(debug=opts.debug)
 
