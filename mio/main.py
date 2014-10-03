@@ -29,6 +29,8 @@ def repl(debug=False):
 
     interpreter = Interpreter()
 
+    stdout.write("%s %s\n" % (mio.__name__, mio.__version__))
+
     while True:
         stdout.write("> ")
         stdout.flush()
