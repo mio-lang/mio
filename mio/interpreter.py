@@ -78,13 +78,15 @@ class Interpreter(object):
         # TODO: Refactor
 
         pc = 0
+        running = True
+
         rs = Frame()
         frame = Frame()
 
         code = bc.code
         receiver = self.space.root
 
-        while pc < len(code):
+        while pc < len(code) or running:
             try:
                 jitdriver.jit_merge_point(
                     bc=bc, code=code, frame=frame, pc=pc, self=self
@@ -104,6 +106,12 @@ class Interpreter(object):
                     else:
                         value = None
                     frame.push(Message(self.space, constant, value=value))
+                elif c == bytecode.BIND:
+                    args = frame.pop_args(arg)
+                    for i in xrange(len(args)):
+                        if i < (len(args) - 1):
+                            args[i].next = args[(i + 1)]
+                    frame.push(args[0])
                 elif c == bytecode.EVAL:
                     if not rs.empty():
                         receiver = rs.pop()
@@ -114,8 +122,10 @@ class Interpreter(object):
                     result = message.eval(self.space, receiver)
                     frame.push(result)
                     rs.push(result)
-                elif c == bytecode.POPRS:
+                elif c == bytecode.DROP:
                     rs.pop()
+                elif c == bytecode.STOP:
+                    break
                 else:
                     assert AssertionError("Unknown Bytecode: %d" % c)
             except Error as e:

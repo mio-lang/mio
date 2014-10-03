@@ -31,5 +31,5 @@ class CompilerContext(object):
 def compile(node):
     ctx = CompilerContext()
     node.compile(ctx)
-    ctx.emit(bytecode.END)
+    ctx.emit(bytecode.STOP)
     return ctx.create_bytecode()

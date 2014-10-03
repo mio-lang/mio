@@ -83,8 +83,10 @@ class Message(Node):
         self.value = value
 
     def compile(self, ctx, eval=True):
+        n = 0
         next = self
         while next is not None:
+            n += 1
             args = next.getargs()
             name = next.getname()
             value = next.getvalue()
@@ -95,11 +97,13 @@ class Message(Node):
                 ctx.emit(bytecode.LOAD, ctx.register_constant(name))
 
                 for arg in args:
-                    arg.compile(ctx, False)
+                    n = arg.compile(ctx, False)
+                    ctx.emit(bytecode.BIND, n)
 
             if eval or args:
                 ctx.emit(bytecode.EVAL, len(args))
                 if not eval:
-                    ctx.emit(bytecode.POPRS)
+                    ctx.emit(bytecode.DROP)
 
             next = next.getnext()
+        return n

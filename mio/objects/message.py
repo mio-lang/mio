@@ -16,6 +16,8 @@ class Message(Object):
         self.args = args
         self.value = value
 
+        self.next = None
+
         self.terminator = self.name is not None and self.name in "\r\n;"
 
     def repr(self):
