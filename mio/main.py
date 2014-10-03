@@ -89,15 +89,16 @@ def usage(prog):
 
 def help():
     print "Options and Arguments:"
-    print "  -d debug output"
-    print "  -e evaluate string"
-    print "  -h to display this help"
-    print "  -v to display the version"
+    print "  -d enable debug output"
+    print "  -e evaluate the string"
+    print "  -h display this help"
+    print "  -i inspect interactively"
+    print "  -v display the version"
     return 0
 
 
 def version():
-    print "mio v%s" % mio.version
+    print "%s %s" % (mio.__name__, mio.__version__)
     return 0
 
 
@@ -123,6 +124,7 @@ def parse_args(argv):
     opts.debug = parse_bool_arg('-d', argv)
     opts.eval = parse_arg("-e", argv)
     opts.help = parse_bool_arg("-h", argv)
+    opts.inspect = parse_bool_arg("-i", argv)
     opts.version = parse_bool_arg("-v", argv)
 
     del argv[0]
@@ -142,7 +144,8 @@ def main(argv):
         return version()
 
     if args:
-        return runfile(args[0], debug=opts.debug)
+        status = runfile(args[0], debug=opts.debug)
+        return repl(debug=opts.debug) if opts.inspect else status
     elif opts.eval:
         return runsource(opts.eval)
     else:
