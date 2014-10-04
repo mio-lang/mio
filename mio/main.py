@@ -8,78 +8,15 @@ import sys
 
 
 from rpython.jit.codewriter.policy import JitPolicy
-from rpython.rlib.streamio import fdopen_as_stream, open_file_as_stream
 
 
 import mio
-from mio.lexer import lex
-from mio.parser import parse
 from mio.rpath import basename
-from mio.compiler import compile
-from mio.interpreter import interpret, Interpreter
+from mio.interpreter import Interpreter
 
 
 class Options(object):
     """Options Container"""
-
-
-def repl(debug=False):
-    stdin = fdopen_as_stream(0, "r")
-    stdout = fdopen_as_stream(1, "a")
-
-    interpreter = Interpreter()
-
-    stdout.write("%s %s\n" % (mio.__name__, mio.__version__))
-
-    while True:
-        stdout.write("> ")
-        stdout.flush()
-        s = stdin.readline()
-
-        if not s:
-            break  # Handle EOF
-
-        s = s.strip("\n")
-        if not s:
-            continue  # Handle plain ENTER
-
-        ast = parse(lex(s))
-        if debug:
-            print ast.repr()
-
-        bc = compile(ast)
-        if debug:
-            print bc.repr()
-
-        result = interpreter.run(bc)
-        if result is not None:
-            print result.repr()
-
-    return 0
-
-
-def runsource(source, filename="<stdin>", debug=False):
-    ast = parse(lex(source), filename)
-    if debug:
-        print ast.repr()
-
-    bc = compile(ast)
-    if debug:
-        print bc.repr()
-
-    result = interpret(bc)
-    if result is not None:
-        print result
-
-    return 0
-
-
-def runfile(filename, debug=False):
-    f = open_file_as_stream(filename)
-    source = f.readall()
-    f.close()
-
-    return runsource(source, filename=filename, debug=debug)
 
 
 def usage(prog):
@@ -143,14 +80,20 @@ def main(argv):
     if opts.version:
         return version()
 
+    interpreter = Interpreter(debug=opts.debug)
+
     if args:
-        status = runfile(args[0], debug=opts.debug)
-        return repl(debug=opts.debug) if opts.inspect else status
+        interpreter.runfile(args[0])
+        if opts.inspect:
+            interpreter.repl()
     elif opts.eval:
-        status = runsource(opts.eval, debug=opts.debug)
-        return repl(debug=opts.debug) if opts.inspect else status
+        interpreter.runsource(opts.eval)
+        if opts.inspect:
+            interpreter.repl()
     else:
-        return repl(debug=opts.debug)
+        interpreter.repl()
+
+    return 0
 
 
 def target(driver, args):

@@ -7,13 +7,23 @@
 
 
 from rpython.rlib import jit
+from rpython.rlib.streamio import fdopen_as_stream
+from rpython.rlib.streamio import open_file_as_stream
 
 
+import mio
 from . import bytecode
+from .lexer import lex
+from .parser import parse
 from .errors import Error
+from .compiler import compile
 from .utils import unquote_string
 from .objspace import ObjectSpace
 from .objects import Message, Number, String
+
+
+BANNER = "%s %s\n" % (mio.__name__, mio.__version__)
+PROMPT = "> "
 
 
 def get_printable_location(pc, code, bc):
@@ -71,8 +81,52 @@ class Interpreter(object):
 
     _immutable_fields_ = ["bytecode"]
 
-    def __init__(self):
+    def __init__(self, debug=False, banner=BANNER, prompt=PROMPT):
+        self.debug = debug
+        self.banner = banner
+        self.prompt = prompt
+
         self.space = ObjectSpace()
+
+    def runsource(self, source, filename="<stdin>"):
+        ast = parse(lex(source), filename)
+        if self.debug:
+            print ast.repr()
+
+        bc = compile(ast)
+        if self.debug:
+            print bc.repr()
+
+        return self.run(bc)
+
+    def runfile(self, filename):
+        f = open_file_as_stream(filename)
+        source = f.readall()
+        f.close()
+
+        return self.runsource(source, filename=filename)
+
+    def repl(self, banner=None, prompt=None):
+        stdin = fdopen_as_stream(0, "r")
+        stdout = fdopen_as_stream(1, "a")
+
+        stdout.write(banner or self.banner)
+
+        while True:
+            stdout.write(prompt or self.prompt)
+            stdout.flush()
+            s = stdin.readline()
+
+            if not s:
+                break  # Handle EOF
+
+            s = s.strip("\n")
+            if not s:
+                continue  # Handle plain ENTER
+
+            result = self.runsource(s)
+            if result is not None:
+                print result.repr()
 
     def run(self, bc):  # noqa
         # TODO: Refactor
