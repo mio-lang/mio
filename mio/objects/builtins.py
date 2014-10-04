@@ -14,6 +14,8 @@ class Builtins(Object):
     def null(self, space, receiver, context, message):
         """Null Message"""
 
+        return space.object
+
     @registry.register()
     def delete(self, space, receiver, context, message):
         """Delete an attribute on the receiver"""
@@ -25,6 +27,7 @@ class Builtins(Object):
 
         if name in receiver.attrs:
             del receiver.attrs[name]
+        return space.object
 
     @registry.register()
     def get(self, space, receiver, context, message):
@@ -37,6 +40,7 @@ class Builtins(Object):
 
         if name in receiver.attrs:
             return receiver.attrs[name]
+        return space.object
 
     @registry.register()
     def set(self, space, receiver, context, message):
@@ -64,6 +68,8 @@ class Builtins(Object):
                 args.append(arg.str())
 
         print " ".join(args)
+
+        return space.object
 
     @registry.register()
     def method(self, space, receiver, context, message):

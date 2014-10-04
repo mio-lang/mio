@@ -1,7 +1,7 @@
 from pypy.objspace.std.bytesobject import string_escape_encode
 
 
-from ..errors import LookupError
+from ..errors import Error, LookupError
 
 from .object import Object
 
@@ -39,29 +39,46 @@ class Message(Object):
 
     def eval(self, space, receiver, context=None):
         context = receiver if context is None else context
+        next = self
 
-        if self.terminator:
-            return context
+        while next is not None:
+            try:
+                if next.terminator:
+                    value = context
+                elif next.value is not None:
+                    value = next.value
+                else:
+                    name = next.name
+                    attr = receiver.lookup(name)
+                    if attr is not None:
+                        value = attr.call(
+                            space, receiver, context, next
+                        )
+                    else:
+                        attr = space.builtins.lookup(name)
+                        if attr is not None:
+                            value = attr.call(
+                                space, receiver, context, next
+                            )
+                        else:
+                            forward = receiver.lookup("forward")
+                            if forward is not None:
+                                value = forward.call(
+                                    space, receiver, context, next
+                                )
+                            else:
+                                raise LookupError(
+                                    "%s has no attribute %s" % (
+                                        receiver.repr(),
+                                        string_escape_encode(name, "'")
+                                    )
+                                )
+                receiver = value
+                next = next.next
+                # Help out the RPython Annotator
+                assert isinstance(next, Message) or next is None
+            except Error as e:
+                e.stack.append(e)
+                raise
 
-        name, value = self.name, self.value
-
-        if value is not None:
-            return self.value
-
-        attr = receiver.lookup(name)
-        if attr is not None:
-            return attr.call(space, receiver, context, self)
-
-        attr = space.builtins.lookup(name)
-        if attr is not None:
-            return attr.call(space, receiver, context, self)
-
-        forward = receiver.lookup("forward")
-        if forward is not None:
-            return forward.call(space, receiver, context, self)
-
-        raise LookupError(
-            "%s has no attribute %s" % (
-                receiver.repr(), string_escape_encode(name, "'")
-            )
-        )
+        return receiver

@@ -4,6 +4,8 @@ class Error(Exception):
     def __init__(self, value):
         self.value = value
 
+        self.stack = []
+
     def __repr__(self):
         return self.repr()
 
