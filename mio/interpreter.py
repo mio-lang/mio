@@ -7,7 +7,6 @@
 
 
 from rpython.rlib import jit
-from rpython.rlib.streamio import fdopen_as_stream
 from rpython.rlib.streamio import open_file_as_stream
 
 
@@ -17,13 +16,14 @@ from .lexer import lex
 from .parser import parse
 from .errors import Error
 from .compiler import compile
+from .rreadline import readline
 from .utils import unquote_string
 from .objspace import ObjectSpace
 from .objects import Message, Number, String
 
-
 BANNER = "%s %s\n" % (mio.__name__, mio.__version__)
-PROMPT = "> "
+PS1 = ">>> "
+PS2 = "... "
 
 
 def get_printable_location(pc, code, bc):
@@ -81,10 +81,11 @@ class Interpreter(object):
 
     _immutable_fields_ = ["bytecode"]
 
-    def __init__(self, debug=False, banner=BANNER, prompt=PROMPT):
+    def __init__(self, debug=False, banner=BANNER, ps1=PS1, ps2=PS2):
         self.debug = debug
         self.banner = banner
-        self.prompt = prompt
+        self.ps1 = ps1
+        self.ps2 = ps2
 
         self.space = ObjectSpace()
 
@@ -106,23 +107,24 @@ class Interpreter(object):
 
         return self.runsource(source, filename=filename)
 
-    def repl(self, banner=None, prompt=None):
-        stdin = fdopen_as_stream(0, "r")
-        stdout = fdopen_as_stream(1, "a")
+    def repl(self, banner=None, ps1=None, ps2=None):
+        banner = banner or self.banner
+        ps1 = ps1 or self.ps1
+        ps2 = ps2 or self.ps2
 
-        stdout.write(banner or self.banner)
+        print banner
 
         while True:
-            stdout.write(prompt or self.prompt)
-            stdout.flush()
-            s = stdin.readline()
-
-            if not s:
-                break  # Handle EOF
+            try:
+                s = readline(ps1)
+            except EOFError:
+                break
 
             s = s.strip("\n")
             if not s:
-                continue  # Handle plain ENTER
+                continue
+
+            s = s.encode("utf-8")
 
             result = self.runsource(s)
             if result is not None:
