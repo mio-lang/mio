@@ -1,4 +1,3 @@
-from rpython.translator import cdir
 from rpython.rtyper.lltypesystem import rffi
 from rpython.translator.tool.cbuild import ExternalCompilationInfo
 
@@ -17,4 +16,7 @@ _readline = llexternal("readline", [rffi.CCHARP], rffi.CCHARP)
 
 
 def readline(prompt):
-    return unicode(rffi.charp2str(_readline(rffi.str2charp(prompt))))
+    ptr = _readline(rffi.str2charp(prompt))
+    if not ptr:
+        raise EOFError()
+    return rffi.charp2str(ptr)

@@ -124,8 +124,6 @@ class Interpreter(object):
             if not s:
                 continue
 
-            s = s.encode("utf-8")
-
             result = self.runsource(s)
             if result is not None:
                 print result.repr()
