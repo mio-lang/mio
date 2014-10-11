@@ -1,5 +1,7 @@
 #!/usr/bin/env mio
 
-Number fact = method(reduce(block(a, x, a * x), range(1, self)))
+set("fact", method(n,
+    n *(fact(n -(1)))
+))
 
-print(10 fact())
+print(fact(10))
