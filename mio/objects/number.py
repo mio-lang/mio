@@ -31,3 +31,33 @@ class Number(Object):
         assert isinstance(other, Number)
 
         return receiver.clone(receiver.value + other.value)
+
+    @registry.register("-")
+    def sub(self, space, receiver, context, message):
+        assert len(message.args) == 1
+        assert isinstance(receiver, Number)
+
+        other = message.args[0].eval(space, context)
+        assert isinstance(other, Number)
+
+        return receiver.clone(receiver.value - other.value)
+
+    @registry.register("*")
+    def mul(self, space, receiver, context, message):
+        assert len(message.args) == 1
+        assert isinstance(receiver, Number)
+
+        other = message.args[0].eval(space, context)
+        assert isinstance(other, Number)
+
+        return receiver.clone(receiver.value * other.value)
+
+    @registry.register("/")
+    def div(self, space, receiver, context, message):
+        assert len(message.args) == 1
+        assert isinstance(receiver, Number)
+
+        other = message.args[0].eval(space, context)
+        assert isinstance(other, Number)
+
+        return receiver.clone(receiver.value / other.value)
