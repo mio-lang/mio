@@ -1,0 +1,11 @@
+[run]
+omit = mio/main.py
+       mio/__init__.py
+       mio/objects/__init__.py
+       tests/*
+
+[html]
+directory = coverage
+
+[xml]
+output = coverage.xml
