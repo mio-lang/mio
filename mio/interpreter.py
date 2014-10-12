@@ -116,13 +116,9 @@ class Interpreter(object):
 
         while True:
             try:
-                s = readline(ps1)
+                s = readline(ps1).strip()
             except EOFError:
                 break
-
-            s = s.strip("\n")
-            if not s:
-                continue
 
             result = self.runsource(s)
             if result is not None:
@@ -152,13 +148,19 @@ class Interpreter(object):
 
                 if c == bytecode.LOAD:
                     constant = bc.constants[arg]
-                    c = constant[0]
-                    if c == "-" or c.isdigit():
-                        value = Number(self.space, float(constant))
-                    elif constant[0] in "'\"":
-                        value = String(self.space, unquote_string(constant))
-                    else:
+                    # Null Message
+                    if constant == "":
                         value = None
+                    else:
+                        c = constant[0]
+                        if c == "-" or c.isdigit():
+                            value = Number(self.space, float(constant))
+                        elif constant[0] in "'\"":
+                            value = String(
+                                self.space, unquote_string(constant)
+                            )
+                        else:
+                            value = None
                     frame.push(Message(self.space, constant, value=value))
                 elif c == bytecode.BIND:
                     args = frame.pop_args(arg)

@@ -10,12 +10,6 @@ class Builtins(Object):
 
     registry = Registry()
 
-    @registry.register("")
-    def null(self, space, receiver, context, message):
-        """Null Message"""
-
-        return space.object
-
     @registry.register()
     def delete(self, space, receiver, context, message):
         """Delete an attribute on the receiver"""
@@ -75,10 +69,8 @@ class Builtins(Object):
     def method(self, space, receiver, context, message):
         """Create a new bound Method Object"""
 
-        assert len(message.args) >= 1
-
-        body = message.args[-1]
         args = message.args[:-1] if len(message.args) > 1 else []
+        body = message.args[-1] if len(message.args) > 0 else None
 
         return Method(space, body, args=args, binding=receiver)
 

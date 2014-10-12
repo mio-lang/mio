@@ -66,6 +66,10 @@ class Method(Object):
         return Method(self.space, self.body, args=self.args, parent=self)
 
     def call(self, space, receiver, context, message):
+        # Empty Method
+        if self.body is None:
+            return
+
         locals = Locals(space, receiver, context, message, self)
         if self.binding is not None:
             locals.attrs["self"] = locals.parent = receiver
