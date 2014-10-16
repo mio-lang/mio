@@ -45,7 +45,7 @@ class Method(Object):
 
     registry = Registry()
 
-    def __init__(self, space, body, args=None, binding=None, parent=None):
+    def __init__(self, space, body=None, args=None, binding=None, parent=None):
         parent = space.object if parent is None else parent
         Object.__init__(self, space, parent=parent)
 

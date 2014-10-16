@@ -6,7 +6,7 @@ from .object import Object
 
 class String(Object):
 
-    def __init__(self, space, value, parent=None):
+    def __init__(self, space, value="", parent=None):
         parent = space.object if parent is None else parent
         Object.__init__(self, space, parent=parent)
 

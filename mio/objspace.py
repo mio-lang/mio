@@ -6,8 +6,7 @@
 """Object Space"""
 
 
-# from mio.registry import registry
-from mio.objects import Object, Builtins, Message, String
+from .objects import Object, Builtins, Message, Method, Number, String
 
 
 class ObjectSpace(object):
@@ -18,5 +17,13 @@ class ObjectSpace(object):
 
         self.builtins = Builtins(self)
 
-        self.message = Message(self, None)
-        self.string = String(self, "")
+        self.root.attrs.update({
+            "__builtins__": self.builtins,
+            "Object": self.object,
+            "Root": self.root,
+
+            "Message": Message(self),
+            "Method": Method(self),
+            "Number": Number(self),
+            "String": String(self),
+        })

@@ -8,7 +8,7 @@ from .object import Object
 
 class Message(Object):
 
-    def __init__(self, space, name, args=[], value=None, parent=None):
+    def __init__(self, space, name="", args=[], value=None, parent=None):
         parent = space.object if parent is None else parent
         Object.__init__(self, space, parent=parent)
 

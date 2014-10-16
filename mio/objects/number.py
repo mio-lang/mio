@@ -7,7 +7,7 @@ class Number(Object):
 
     registry = Registry()
 
-    def __init__(self, space, value, parent=None):
+    def __init__(self, space, value=0.0, parent=None):
         parent = space.object if parent is None else parent
         Object.__init__(self, space, parent=parent)
 
