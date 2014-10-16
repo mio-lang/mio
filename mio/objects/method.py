@@ -30,9 +30,10 @@ class Locals(Object):
 
     def update_args(self):
         for i in xrange(len(self.method.args)):
-            name = self.method.args[i].name
-            value = self.message.args[i].eval(self.space, self.context)
-            self.attrs[name] = value
+            if i < len(self.message.args):
+                name = self.method.args[i].name
+                value = self.message.args[i].eval(self.space, self.context)
+                self.attrs[name] = value
 
     def update_call(self):
         self.attrs["call"] = Call(
