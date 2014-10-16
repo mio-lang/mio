@@ -11,6 +11,7 @@ from pypy.objspace.std.bytesobject import string_escape_encode
 
 bytecodes = [
     "BIND",     # Bind messages on the stack into a message chain (arguments)
+    "PUSH",     # Push a new message on the stack from a message and arguments
     "DROP",     # Discard the top of the receiver stack (arguments)
     "LOAD",     # Load a constant value onto the stack
     "EVAL",     # Evaluate the message on the top of the stack with arguments

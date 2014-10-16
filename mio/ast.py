@@ -107,9 +107,9 @@ class Message(Node):
                     if len(arg) > 1:
                         ctx.emit(bytecode.BIND, len(arg))
 
-            if eval or args:
+            if eval:
                 ctx.emit(bytecode.EVAL, len(args))
-                if not eval:
-                    ctx.emit(bytecode.DROP)
+            else:
+                ctx.emit(bytecode.PUSH, len(args))
 
             next = next.getnext()

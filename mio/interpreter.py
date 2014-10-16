@@ -168,6 +168,11 @@ class Interpreter(object):
                         if i < (len(args) - 1):
                             args[i].next = args[(i + 1)]
                     frame.push(args[0])
+                elif c == bytecode.PUSH:
+                    args = frame.pop_args(arg)
+                    message = frame.pop()
+                    message.args = args
+                    frame.push(message)
                 elif c == bytecode.EVAL:
                     if not rs.empty():
                         receiver = rs.pop()
