@@ -83,4 +83,4 @@ class Builtins(Object):
         body = message.args[-1]
         args = message.args[:-1] if len(message.args) > 1 else []
 
-        return Method(space, body, args=args)
+        return Method(space, body, args=args, binding=context)

@@ -71,11 +71,10 @@ class Method(Object):
         if self.body is None:
             return
 
-        locals = Locals(space, receiver, context, message, self)
-        if self.binding is not None:
-            locals.attrs["self"] = locals.parent = receiver
-        else:
-            locals.attrs["self"] = locals.parent = context
+        locals = Locals(
+            space, receiver, context, message, self,
+            parent=(self.binding if self.binding is not None else context)
+        )
 
         return self.body.eval(space, locals)
 
