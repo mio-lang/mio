@@ -10,7 +10,6 @@ class Object(object):
         self.parent = parent
 
         self.attrs = {}
-        self.registry.populate(self, space)
 
     def __eq__(self, other):
         return (
@@ -47,7 +46,15 @@ class Object(object):
         return self
 
     def clone(self):
-        return Object(self.space, parent=self)
+        return Object(self.space, self)
 
     def eval(self, space, receiver, context=None):
         return self
+
+    @registry.register("clone")
+    def m_clone(self, space, receiver, context, message):
+        """Create a new Object by cloning the receiver"""
+
+        assert isinstance(receiver, Object)
+
+        return receiver.clone()

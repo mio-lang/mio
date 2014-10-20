@@ -6,24 +6,29 @@
 """Object Space"""
 
 
-from .objects import Object, Builtins, Message, Method, Number, String
+from .objects import Object, Builtins, Number, String
 
 
 class ObjectSpace(object):
 
     def __init__(self):
-        self.object = Object(self)
         self.root = Object(self)
+        self.object = Object(self)
+        self.object.registry.populate(self.object, self)
 
         self.builtins = Builtins(self)
+        self.builtins.registry.populate(self.builtins, self)
+
+        self.number = Number(self)
+        self.number.registry.populate(self.number, self)
+
+        self.string = String(self)
+        self.string.registry.populate(self.string, self)
 
         self.root.attrs.update({
             "__builtins__": self.builtins,
             "Object": self.object,
             "Root": self.root,
-
-            "Message": Message(self),
-            "Method": Method(self),
-            "Number": Number(self),
-            "String": String(self),
+            "Number": self.number,
+            "String": self.string
         })
