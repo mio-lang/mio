@@ -63,8 +63,6 @@ class Builtins(Object):
 
         print " ".join(args)
 
-        return space.object
-
     @registry.register()
     def method(self, space, receiver, context, message):
         """Create a new bound Method Object"""
