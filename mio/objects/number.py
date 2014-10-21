@@ -7,7 +7,7 @@ class Number(Object):
 
     registry = Registry()
 
-    def __init__(self, space, value=0.0, parent=None):
+    def __init__(self, space, value=0, parent=None):
         self.value = value
 
         Object.__init__(self, space, parent=(parent or space.object))
@@ -21,7 +21,7 @@ class Number(Object):
     def clone(self):
         return Number(self.space, value=self.value, parent=self)
 
-    def clone_and_init(self, value=0.0):
+    def clone_and_init(self, value=0):
         return Number(self.space, value=value, parent=self)
 
     @registry.register("+")

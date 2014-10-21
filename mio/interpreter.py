@@ -15,11 +15,12 @@ from . import bytecode
 from .lexer import lex
 from .parser import parse
 from .errors import Error
-from .compiler import compile
 from .objects import Message
+from .compiler import compile
 from .rreadline import readline
-from .utils import unquote_string
 from .objspace import ObjectSpace
+from .utils import parse_int, parse_float, unquote_string
+
 
 BANNER = "%s %s\n" % (mio.__name__, mio.__version__)
 PS1 = ">>> "
@@ -154,9 +155,14 @@ class Interpreter(object):
                     else:
                         c = constant[0]
                         if c == "-" or c.isdigit():
-                            value = self.space.number.clone_and_init(
-                                float(constant)
-                            )
+                            if "." in constant:
+                                value = self.space.integer.clone_and_init(
+                                    parse_float(constant)
+                                )
+                            else:
+                                value = self.space.integer.clone_and_init(
+                                    parse_int(constant)
+                                )
                         elif constant[0] in "'\"":
                             value = self.space.string.clone_and_init(
                                 unquote_string(constant)
