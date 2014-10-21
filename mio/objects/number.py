@@ -1,3 +1,6 @@
+from rpython.rlib.rdtoa import dtoa
+
+
 from ..registry import Registry
 
 from .object import Object
@@ -13,7 +16,7 @@ class Number(Object):
         Object.__init__(self, space, parent=(parent or space.object))
 
     def repr(self):
-        return str(self.value)
+        return dtoa(self.value)
 
     def hash(self):
         return hash(self.value)
