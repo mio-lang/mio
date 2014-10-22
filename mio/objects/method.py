@@ -3,44 +3,6 @@ from ..registry import Registry
 from .object import Object
 
 
-class Call(Object):
-
-    def __init__(self, space, receiver, context, message, parent=None):
-        parent = space.object if parent is None else parent
-        Object.__init__(self, space, parent=parent)
-
-        self.attrs["receiver"] = receiver
-        self.attrs["context"] = context
-        self.attrs["message"] = message
-
-
-class Locals(Object):
-
-    def __init__(self, space, receiver, context, message, method, parent=None):
-        parent = space.object if parent is None else parent
-        Object.__init__(self, space, parent=parent)
-
-        self.receiver = receiver
-        self.context = context
-        self.message = message
-        self.method = method
-
-        self.update_args()
-        self.update_call()
-
-    def update_args(self):
-        for i in xrange(len(self.method.args)):
-            if i < len(self.message.args):
-                name = self.method.args[i].name
-                value = self.message.args[i].eval(self.space, self.context)
-                self.attrs[name] = value
-
-    def update_call(self):
-        self.attrs["call"] = Call(
-            self.space, self.receiver, self.context, self.message
-        )
-
-
 class Method(Object):
 
     registry = Registry()
@@ -76,8 +38,8 @@ class Method(Object):
         if self.body is None:
             return
 
-        locals = Locals(
-            space, receiver, context, message, self,
+        locals = self.space.locals.clone_and_init(
+            receiver, context, message, self,
             parent=(self.binding if self.binding is not None else context)
         )
 

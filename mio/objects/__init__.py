@@ -1,6 +1,8 @@
+from .call import Call
+from .locals import Locals
+from .method import Method
 from .object import Object
 from .string import String
-from .method import Method
 
 from .float import Float
 from .number import Number
