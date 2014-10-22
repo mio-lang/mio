@@ -1,6 +1,5 @@
 from ..registry import Registry
 
-from .method import Method
 from .object import Object
 from .message import Message
 
@@ -70,7 +69,9 @@ class Builtins(Object):
         args = message.args[:-1] if len(message.args) > 1 else []
         body = message.args[-1] if len(message.args) > 0 else None
 
-        return Method(space, body, args=args, binding=receiver)
+        return self.space.method.clone_and_init(
+            body, args=args, binding=receiver
+        )
 
     @registry.register()
     def block(self, space, receiver, context, message):
@@ -81,4 +82,6 @@ class Builtins(Object):
         body = message.args[-1]
         args = message.args[:-1] if len(message.args) > 1 else []
 
-        return Method(space, body, args=args, binding=context)
+        return self.space.method.clone_and_init(
+            body, args=args, binding=context
+        )

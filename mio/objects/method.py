@@ -46,8 +46,7 @@ class Method(Object):
     registry = Registry()
 
     def __init__(self, space, body=None, args=None, binding=None, parent=None):
-        parent = space.object if parent is None else parent
-        Object.__init__(self, space, parent=parent)
+        Object.__init__(self, space, parent=(parent or space.object))
 
         self.body = body
         self.args = args if args is not None else []
@@ -66,7 +65,13 @@ class Method(Object):
     def clone(self):
         return Method(self.space, self.body, args=self.args, parent=self)
 
+    def clone_and_init(self, body=None, args=None, binding=None):
+        return Method(self.space, body, args, parent=self)
+
+    @registry.register()
     def call(self, space, receiver, context, message):
+        """Call Method"""
+
         # Empty Method
         if self.body is None:
             return
