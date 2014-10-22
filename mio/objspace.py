@@ -32,9 +32,14 @@ class ObjectSpace(object):
         self.string.registry.populate(self.string, self)
 
         self.root.attrs.update({
-            "__builtins__": self.builtins,
-            "Object": self.object,
             "Root": self.root,
+            "Object": self.object,
+
+            "Float": self.float,
             "Number": self.number,
-            "String": self.string
+            "Integer": self.integer,
+
+            "String": self.string,
+
+            "__builtins__": self.builtins,
         })
