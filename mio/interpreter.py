@@ -156,7 +156,7 @@ class Interpreter(object):
                         c = constant[0]
                         if c == "-" or c.isdigit():
                             if "." in constant:
-                                value = self.space.integer.clone_and_init(
+                                value = self.space.float.clone_and_init(
                                     parse_float(constant)
                                 )
                             else:
