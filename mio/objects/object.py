@@ -27,7 +27,7 @@ class W_Object(object):
         return self.str()
 
     def repr(self):
-        return "<%s attrs=%s>" % (self.__class__.__name__, self.attrs.keys())
+        return "<%s attrs=%s>" % (self.type(), self.attrs.keys())
 
     def str(self):
         return self.repr()
@@ -36,7 +36,7 @@ class W_Object(object):
         return sum(map(hash, self.attrs + [self.parent]))
 
     def type(self):
-        return self.__class__.__name__
+        return self.__class__.__name__[2:]
 
     def lookup(self, name):
         try:
