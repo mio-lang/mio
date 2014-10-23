@@ -30,10 +30,7 @@ class W_Method(W_Object):
     def clone_and_init(self, body=None, args=None, binding=None):
         return W_Method(self.space, body, args, parent=self)
 
-    @registry.register("call")
-    def m_call(self, space, receiver, context, message):
-        """Call Method"""
-
+    def call(self, space, receiver, context, message):
         # Empty Method
         if self.body is None:
             return
@@ -44,6 +41,12 @@ class W_Method(W_Object):
         )
 
         return self.body.eval(space, locals)
+
+    @registry.register("call")
+    def m_call(self, space, receiver, context, message):
+        """Call Method"""
+
+        return receiver.call(space, receiver, context, message)
 
     @registry.register("bind")
     def m_bind(self, space, receiver, context, message):
