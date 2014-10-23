@@ -11,9 +11,9 @@ class W_Number(W_Object):
     registry = Registry()
 
     def __init__(self, space, value=0, parent=None):
-        self.value = value
-
         W_Object.__init__(self, space, parent=(parent or space.object))
+
+        self.value = value
 
     def repr(self):
         return dtoa(self.value)
