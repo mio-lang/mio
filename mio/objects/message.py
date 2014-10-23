@@ -3,14 +3,13 @@ from pypy.objspace.std.bytesobject import string_escape_encode
 
 from ..errors import Error, LookupError
 
-from .object import Object
+from .object import W_Object
 
 
-class Message(Object):
+class W_Message(W_Object):
 
     def __init__(self, space, name="", args=[], value=None, parent=None):
-        parent = space.object if parent is None else parent
-        Object.__init__(self, space, parent=parent)
+        W_Object.__init__(self, space, parent=(parent or space.object))
 
         self.name = name
         self.args = args
@@ -32,7 +31,7 @@ class Message(Object):
         return h
 
     def clone(self):
-        return Message(
+        return W_Message(
             self.space, self.name, self.args,
             value=self.value, parent=self
         )
@@ -76,7 +75,7 @@ class Message(Object):
                 receiver = value
                 next = next.next
                 # Help out the RPython Annotator
-                assert isinstance(next, Message) or next is None
+                assert isinstance(next, W_Message) or next is None
             except Error as e:
                 e.stack.append(e)
                 raise

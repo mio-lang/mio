@@ -1,19 +1,19 @@
 from ..registry import Registry
 
-from .number import Number
+from .number import W_Number
 
 
-class Integer(Number):
+class W_Integer(W_Number):
 
     registry = Registry()
 
     def __init__(self, space, value=0, parent=None):
-        Number.__init__(self, space, parent=(parent or space.number))
+        W_Number.__init__(self, space, parent=(parent or space.number))
 
         self.value = value
 
     def clone(self):
-        return Integer(self.space, value=self.value, parent=self)
+        return W_Integer(self.space, value=self.value, parent=self)
 
     def clone_and_init(self, value=0):
-        return Integer(self.space, value=value, parent=self)
+        return W_Integer(self.space, value=value, parent=self)

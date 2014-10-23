@@ -1,11 +1,10 @@
-from .object import Object
+from .object import W_Object
 
 
-class CFunction(Object):
+class W_CFunction(W_Object):
 
     def __init__(self, space, name, func, parent=None):
-        parent = space.object if parent is None else parent
-        Object.__init__(self, space, parent=parent)
+        W_Object.__init__(self, space, parent=(parent or space.object))
 
         self.name = name
         self.func = func
@@ -22,4 +21,4 @@ class CFunction(Object):
         return self.func(receiver, space, receiver, context, message)
 
     def clone(self):
-        return CFunction(self.space, self.name, self.func, parent=self)
+        return W_CFunction(self.space, self.name, self.func, parent=self)

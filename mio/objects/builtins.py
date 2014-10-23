@@ -1,29 +1,29 @@
 from ..registry import Registry
 
-from .object import Object
-from .message import Message
+from .object import W_Object
+from .message import W_Message
 
 
-class Builtins(Object):
+class W_Builtins(W_Object):
     """Builtins"""
 
     registry = Registry()
 
     @registry.register("print")
-    def c_print(self, space, receiver, context, message):
+    def m_print(self, space, receiver, context, message):
         """Print to standard output"""
 
         args = []
         for arg in message.args:
-            if isinstance(arg, Message):
+            if isinstance(arg, W_Message):
                 args.append(arg.eval(space, context).str())
             else:
                 args.append(arg.str())
 
         print " ".join(args)
 
-    @registry.register()
-    def method(self, space, receiver, context, message):
+    @registry.register("method")
+    def m_method(self, space, receiver, context, message):
         """Create a new bound Method Object"""
 
         args = message.args[:-1] if len(message.args) > 1 else []
@@ -33,8 +33,8 @@ class Builtins(Object):
             body, args=args, binding=receiver
         )
 
-    @registry.register()
-    def block(self, space, receiver, context, message):
+    @registry.register("block")
+    def m_block(self, space, receiver, context, message):
         """Create a new unbound Method Object"""
 
         assert len(message.args) >= 1

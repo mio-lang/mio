@@ -15,8 +15,8 @@ from . import bytecode
 from .lexer import lex
 from .parser import parse
 from .errors import Error
-from .objects import Message
 from .compiler import compile
+from .objects import W_Message
 from .rreadline import readline
 from .objspace import ObjectSpace
 from .utils import parse_int, parse_float, unquote_string
@@ -169,7 +169,7 @@ class Interpreter(object):
                             )
                         else:
                             value = None
-                    frame.push(Message(self.space, constant, value=value))
+                    frame.push(W_Message(self.space, constant, value=value))
                 elif c == bytecode.BIND:
                     args = frame.pop_args(arg)
                     for i in xrange(len(args)):

@@ -1,9 +1,9 @@
 from ..registry import Registry
 
-from .object import Object
+from .object import W_Object
 
 
-class Null(Object):
+class W_Null(W_Object):
 
     registry = Registry()
 

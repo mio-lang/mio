@@ -1,7 +1,7 @@
 from ..registry import Registry
 
 
-class Object(object):
+class W_Object(object):
 
     registry = Registry()
 
@@ -49,7 +49,7 @@ class Object(object):
         return self
 
     def clone(self):
-        return Object(self.space, self)
+        return W_Object(self.space, self)
 
     def eval(self, space, receiver, context=None):
         return self
@@ -58,7 +58,7 @@ class Object(object):
     def m_clone(self, space, receiver, context, message):
         """Create a new Object by cloning the receiver"""
 
-        assert isinstance(receiver, Object)
+        assert isinstance(receiver, W_Object)
 
         return receiver.clone()
 
@@ -77,8 +77,8 @@ class Object(object):
             return parent
         return self.space.null
 
-    @registry.register()
-    def delete(self, space, receiver, context, message):
+    @registry.register("delete")
+    def m_delete(self, space, receiver, context, message):
         """Delete an attribute"""
 
         assert len(message.args) == 1
@@ -90,8 +90,8 @@ class Object(object):
             del receiver.attrs[name]
         return space.object
 
-    @registry.register()
-    def get(self, space, receiver, context, message):
+    @registry.register("get")
+    def m_get(self, space, receiver, context, message):
         """Get an attribute"""
 
         assert len(message.args) == 1
@@ -103,8 +103,8 @@ class Object(object):
             return receiver.attrs[name]
         return space.object
 
-    @registry.register()
-    def set(self, space, receiver, context, message):
+    @registry.register("set")
+    def m_set(self, space, receiver, context, message):
         """Set an attribute"""
 
         assert len(message.args) == 2

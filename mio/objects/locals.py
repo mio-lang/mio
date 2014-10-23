@@ -1,10 +1,15 @@
-from .object import Object
+from ..registry import Registry
 
 
-class Locals(Object):
+from .object import W_Object
+
+
+class W_Locals(W_Object):
+
+    registey = Registry()
 
     def __init__(self, space, receiver, context, message, method, parent=None):
-        Object.__init__(self, space, parent=(parent or space.object))
+        W_Object.__init__(self, space, parent=(parent or space.object))
 
         self.receiver = receiver
         self.context = context
@@ -16,13 +21,13 @@ class Locals(Object):
             self.update_call()
 
     def clone(self):
-        return Locals(
+        return W_Locals(
             self.space, self.receiver, self.context,
             self.message, self.method, parent=self
         )
 
     def clone_and_init(self, receiver, context, message, method, parent):
-        return Locals(
+        return W_Locals(
             self.space, receiver, context, message, method, parent=parent
         )
 

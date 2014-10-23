@@ -1,14 +1,14 @@
 from ..registry import Registry
 
-from .object import Object
+from .object import W_Object
 
 
-class Boolean(Object):
+class W_Boolean(W_Object):
 
     registry = Registry()
 
     def __init__(self, space, value, parent=None):
-        Object.__init__(self, space, parent=(parent or space.object))
+        W_Object.__init__(self, space, parent=(parent or space.object))
 
         self.value = bool(value)
 
