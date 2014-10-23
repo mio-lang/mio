@@ -20,6 +20,16 @@ class W_String(W_Object):
     def hash(self):
         return hash(self.value)
 
+    def bool(self):
+        return bool(self.value)
+
+    def cmp(self, other):
+        assert isinstance(other, W_String)
+
+        if self.value == other.value:
+            return 0
+        return -1 if self.value < other.value else 1
+
     def clone(self):
         return W_String(self.space, value=self.value, parent=self)
 

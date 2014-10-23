@@ -1,3 +1,6 @@
+from rpython.rlib.objectmodel import compute_unique_id
+
+
 from ..registry import Registry
 
 
@@ -32,8 +35,22 @@ class W_Object(object):
     def str(self):
         return self.repr()
 
+    def bool(self):
+        return True
+
+    def cmp(self, other):
+        id1 = self.id()
+        id2 = other.id()
+
+        if id1 == id2:
+            return 0
+        return -1 if id1 < id2 else 1
+
     def hash(self):
         return sum(map(hash, self.attrs + [self.parent]))
+
+    def id(self):
+        return compute_unique_id(self)
 
     def type(self):
         return self.__class__.__name__[2:]
@@ -129,3 +146,14 @@ class W_Object(object):
         if name in receiver.attrs:
             return self.space.true
         return self.space.false
+
+    @registry.register("cmp")
+    def m_cmp(self, space, receiver, context, message):
+        """Compare objects"""
+
+        assert len(message.args) == 1
+
+        args = message.args
+        other = args[0].eval(space, context)
+
+        return self.space.integer.clone_and_init(receiver.cmp(other))

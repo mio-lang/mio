@@ -45,3 +45,25 @@ class W_Builtins(W_Object):
         return self.space.method.clone_and_init(
             body, args=args, binding=context
         )
+
+    @registry.register("bool")
+    def m_bool(self, space, receiver, context, message):
+        """Convert argument to a Boolean"""
+
+        assert len(message.args) == 1
+
+        args = message.args
+        obj = args[0].eval(space, context)
+
+        return self.space.true if obj.bool() else self.space.false
+
+    @registry.register("not")
+    def m_not(self, space, receiver, context, message):
+        """Invert a Boolean"""
+
+        assert len(message.args) == 1
+
+        args = message.args
+        obj = args[0].eval(space, context)
+
+        return self.space.false if obj.bool() else self.space.true

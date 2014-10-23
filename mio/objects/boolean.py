@@ -15,6 +15,16 @@ class W_Boolean(W_Object):
     def repr(self):
         return "True" if self.value else "False"
 
+    def bool(self):
+        return bool(self.value)
+
+    def cmp(self, other):
+        assert isinstance(other, W_Boolean)
+
+        if self.value == other.value:
+            return 0
+        return -1 if self.value < other.value else 1
+
     def clone(self):
         return self
 
