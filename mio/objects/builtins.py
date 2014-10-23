@@ -9,46 +9,6 @@ class Builtins(Object):
 
     registry = Registry()
 
-    @registry.register()
-    def delete(self, space, receiver, context, message):
-        """Delete an attribute on the receiver"""
-
-        assert len(message.args) == 1
-
-        args = message.args
-        name = args[0].eval(space, context).str()
-
-        if name in receiver.attrs:
-            del receiver.attrs[name]
-        return space.object
-
-    @registry.register()
-    def get(self, space, receiver, context, message):
-        """Get an attribute on the receiver"""
-
-        assert len(message.args) == 1
-
-        args = message.args
-        name = args[0].eval(space, context).str()
-
-        if name in receiver.attrs:
-            return receiver.attrs[name]
-        return space.object
-
-    @registry.register()
-    def set(self, space, receiver, context, message):
-        """Set an attribute on the receiver"""
-
-        assert len(message.args) == 2
-
-        args = message.args
-        name = args[0].eval(space, context).str()
-        value = args[1].eval(space, context)
-
-        receiver.attrs[name] = value
-
-        return value
-
     @registry.register("print")
     def c_print(self, space, receiver, context, message):
         """Print to standard output"""

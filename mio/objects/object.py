@@ -76,3 +76,43 @@ class Object(object):
         if parent is not None:
             return parent
         return self.space.null
+
+    @registry.register()
+    def delete(self, space, receiver, context, message):
+        """Delete an attribute"""
+
+        assert len(message.args) == 1
+
+        args = message.args
+        name = args[0].eval(space, context).str()
+
+        if name in receiver.attrs:
+            del receiver.attrs[name]
+        return space.object
+
+    @registry.register()
+    def get(self, space, receiver, context, message):
+        """Get an attribute"""
+
+        assert len(message.args) == 1
+
+        args = message.args
+        name = args[0].eval(space, context).str()
+
+        if name in receiver.attrs:
+            return receiver.attrs[name]
+        return space.object
+
+    @registry.register()
+    def set(self, space, receiver, context, message):
+        """Set an attribute"""
+
+        assert len(message.args) == 2
+
+        args = message.args
+        name = args[0].eval(space, context).str()
+        value = args[1].eval(space, context)
+
+        receiver.attrs[name] = value
+
+        return value

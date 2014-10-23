@@ -15,9 +15,10 @@ from .objects import (
 class ObjectSpace(object):
 
     def __init__(self):
-        self.root = Object(self)
         self.object = Object(self)
         self.object.registry.populate(self.object, self)
+
+        self.root = self.object.clone()
 
         self.call = Call(self, None, None, None)
         self.call.registry.populate(self.call, self)
