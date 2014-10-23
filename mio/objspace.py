@@ -38,7 +38,7 @@ class ObjectSpace(object):
         self.true = W_Boolean(self, True)
         self.true.registry.populate(self.true, self)
 
-        self.false = W_Boolean(self, True)
+        self.false = W_Boolean(self, False)
         self.false.registry.populate(self.false, self)
 
         self.number = W_Number(self)
