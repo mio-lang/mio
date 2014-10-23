@@ -67,3 +67,12 @@ class Object(object):
         """Returns Object Type"""
 
         return self.space.string.clone_and_init(receiver.type())
+
+    @registry.register("parent")
+    def m_parent(self, space, receiver, context, message):
+        """Returns Parent Object"""
+
+        parent = receiver.parent
+        if parent is not None:
+            return parent
+        return self.space.null

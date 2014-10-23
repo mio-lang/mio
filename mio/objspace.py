@@ -7,7 +7,8 @@
 
 
 from .objects import (
-    Object, Call, Locals, Method, Builtins, Number, Integer, Float, String
+    Object, Call, Locals, Method, Builtins,
+    Boolean, Null, Number, Integer, Float, String
 )
 
 
@@ -30,6 +31,15 @@ class ObjectSpace(object):
         self.builtins = Builtins(self)
         self.builtins.registry.populate(self.builtins, self)
 
+        self.null = Null(self)
+        self.null.registry.populate(self.null, self)
+
+        self.true = Boolean(self, True)
+        self.true.registry.populate(self.true, self)
+
+        self.false = Boolean(self, True)
+        self.false.registry.populate(self.false, self)
+
         self.number = Number(self)
         self.number.registry.populate(self.number, self)
 
@@ -45,6 +55,10 @@ class ObjectSpace(object):
         self.root.attrs.update({
             "Root": self.root,
             "Object": self.object,
+
+            "Null": self.null,
+            "True": self.true,
+            "False": self.false,
 
             "Float": self.float,
             "Number": self.number,

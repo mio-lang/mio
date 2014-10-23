@@ -4,6 +4,9 @@ from .method import Method
 from .object import Object
 from .string import String
 
+from .null import Null
+from .boolean import Boolean
+
 from .float import Float
 from .number import Number
 from .integer import Integer
