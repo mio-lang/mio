@@ -6,7 +6,9 @@
 """Object Space"""
 
 
-from .objects import Object, Builtins, Number, Integer, Float, String
+from .objects import (
+    Object, Call, Locals, Method, Builtins, Number, Integer, Float, String
+)
 
 
 class ObjectSpace(object):
@@ -15,6 +17,15 @@ class ObjectSpace(object):
         self.root = Object(self)
         self.object = Object(self)
         self.object.registry.populate(self.object, self)
+
+        self.call = Call(self, None, None, None)
+        self.call.registry.populate(self.call, self)
+
+        self.locals = Locals(self, None, None, None, None)
+        self.locals.registry.populate(self.locals, self)
+
+        self.method = Method(self)
+        self.method.registry.populate(self.method, self)
 
         self.builtins = Builtins(self)
         self.builtins.registry.populate(self.builtins, self)
@@ -40,6 +51,10 @@ class ObjectSpace(object):
             "Integer": self.integer,
 
             "String": self.string,
+
+            "Call": self.call,
+            "Locals": self.locals,
+            "Method": self.method,
 
             "__builtins__": self.builtins,
         })
