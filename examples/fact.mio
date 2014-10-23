@@ -1,0 +1,7 @@
+#!/usr/bin/env mio
+
+set("fact", method(n,
+    n *(fact(n -(1)))
+))
+
+print(fact(10))

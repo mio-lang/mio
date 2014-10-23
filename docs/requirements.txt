@@ -1,0 +1,5 @@
+Sphinx
+#releases
+-e git+https://github.com/bitprophet/releases.git#egg=releases
+sphinx_rtd_theme
+sphinxcontrib-bitbucket
