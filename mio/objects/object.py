@@ -77,8 +77,8 @@ class W_Object(object):
             return parent
         return self.space.null
 
-    @registry.register("delete")
-    def m_delete(self, space, receiver, context, message):
+    @registry.register("delattr")
+    def m_delattr(self, space, receiver, context, message):
         """Delete an attribute"""
 
         assert len(message.args) == 1
@@ -116,3 +116,16 @@ class W_Object(object):
         receiver.attrs[name] = value
 
         return value
+
+    @registry.register("has")
+    def m_has(self, space, receiver, context, message):
+        """Test if an object has an attribute"""
+
+        assert len(message.args) == 1
+
+        args = message.args
+        name = args[0].eval(space, context).str()
+
+        if name in receiver.attrs:
+            return self.space.true
+        return self.space.false
