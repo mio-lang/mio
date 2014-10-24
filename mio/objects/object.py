@@ -79,6 +79,17 @@ class W_Object(object):
 
         return receiver.clone()
 
+    @registry.register("do")
+    def m_do(self, space, receiver, context, message):
+        """Evaluate the expression"""
+
+        assert len(message.args) == 1
+
+        args = message.args
+        expr = args[0].eval(space, receiver)
+
+        return receiver
+
     @registry.register("type")
     def m_type(self, space, receiver, context, message):
         """Returns Object Type"""
