@@ -19,6 +19,7 @@ class W_Locals(W_Object):
         if self.method is not None:
             self.update_args()
             self.update_call()
+            self.update_this()
 
     def clone(self):
         return W_Locals(
@@ -42,3 +43,6 @@ class W_Locals(W_Object):
         self.attrs["call"] = self.space.call.clone_and_init(
             self.receiver, self.context, self.message
         )
+
+    def update_this(self):
+        self.attrs["this"] = self.parent
