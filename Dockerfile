@@ -14,8 +14,11 @@ RUN cd /src/pypy && \
     python setup-rpython.py develop && \
     python setup-pypy.py develop
 
-# Application
+# Build
 WORKDIR /app
 ADD . /app
 RUN pip install -r requirements.txt && \
     make clean all
+
+# Cleanup
+RUN rm -rf /src/pypy
