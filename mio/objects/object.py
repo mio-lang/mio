@@ -94,8 +94,8 @@ class W_Object(object):
             return parent
         return self.space.null
 
-    @registry.register("delattr")
-    def m_delattr(self, space, receiver, context, message):
+    @registry.register("del")
+    def m_del(self, space, receiver, context, message):
         """Delete an attribute"""
 
         assert len(message.args) == 1
