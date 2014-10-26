@@ -7,18 +7,17 @@ MAINTAINER James Mills, prologic at shortcircuit dot net dot au
 CMD ["/app/bin/mio"]
 
 # Build/Runtime Dependencies
-RUN pip install mercurial && \
-    hg clone https://bitbucket.org/prologic/pypy /src/pypy
-
-RUN cd /src/pypy && \
-    python setup-rpython.py develop && \
-    python setup-pypy.py develop
+WORKDIR /usr/src
+RUN pip install mercurial
+RUN curl -# -q -O https://bitbucket.org/prologic/pypy/get/tip.tar.bz2 && \
+    tar jxf tip.tar.bz2 && \
+    cd prologic-pypy-* && \
+    python setup-pypy.py develop && \
+    python setup-rpython.py develop
+RUN rm tip.tar.bz2
 
 # Build
 WORKDIR /app
 ADD . /app
 RUN pip install -r requirements.txt && \
-    make clean all
-
-# Cleanup
-RUN rm -rf /src/pypy
+    make
