@@ -1,6 +1,6 @@
 # Docker Image for mio
 
-FROM python:2
+FROM prologic/crux-python:latest
 MAINTAINER James Mills, prologic at shortcircuit dot net dot au
 
 # Startup
