@@ -22,6 +22,8 @@ class W_Builtins(W_Object):
 
         print " ".join(args)
 
+        return self.space.null
+
     @registry.register("method")
     def m_method(self, space, receiver, context, message):
         """Create a new bound Method Object"""

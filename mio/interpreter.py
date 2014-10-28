@@ -122,7 +122,8 @@ class Interpreter(object):
                 break
 
             result = self.runsource(s)
-            if result is not None:
+
+            if result is not self.space.null:
                 print result.repr()
 
     def run(self, bc):  # noqa
@@ -135,7 +136,7 @@ class Interpreter(object):
         frame = Frame()
 
         code = bc.code
-        receiver = self.space.root
+        context = receiver = self.space.root
 
         while pc < len(code) or running:
             try:
@@ -188,7 +189,7 @@ class Interpreter(object):
                     args = frame.pop_args(arg)
                     message = frame.pop()
                     message.args = args
-                    result = message.eval(self.space, receiver)
+                    result = message.eval(self.space, receiver, context)
                     frame.push(result)
                     rs.push(result)
                 elif c == bytecode.DROP:

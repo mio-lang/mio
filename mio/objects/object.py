@@ -86,7 +86,7 @@ class W_Object(object):
         assert len(message.args) == 1
 
         args = message.args
-        expr = args[0].eval(space, receiver)
+        args[0].eval(space, receiver)
 
         return receiver
 

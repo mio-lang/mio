@@ -8,7 +8,7 @@
 
 from .objects import (
     W_Object, W_Call, W_Locals, W_Method, W_Builtins,
-    W_Boolean, W_Null, W_Number, W_Integer, W_Float, W_String
+    W_Continuation, W_Boolean, W_Null, W_Number, W_Integer, W_Float, W_String
 )
 
 
@@ -31,6 +31,9 @@ class ObjectSpace(object):
 
         self.builtins = W_Builtins(self)
         self.builtins.registry.populate(self.builtins, self)
+
+        self.continuation = W_Continuation(self, None, None, None)
+        self.continuation.registry.populate(self.continuation, self)
 
         self.null = W_Null(self)
         self.null.registry.populate(self.null, self)
@@ -70,6 +73,8 @@ class ObjectSpace(object):
             "Call": self.call,
             "Locals": self.locals,
             "Method": self.method,
+
+            "Continuation": self.continuation,
 
             "__builtins__": self.builtins,
         })

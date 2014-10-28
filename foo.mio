@@ -1,0 +1,3 @@
+set("x", Continuation current)
+print("Hello World!")
+x call()
