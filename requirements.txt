@@ -1,4 +1,5 @@
 rply
 pytest
 rpython
+pytest-cov
 -e .

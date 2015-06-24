@@ -6,3 +6,5 @@ install:
 script:
   - py.test tests
   - rpython mio/main.py
+after_success:
+  - coveralls
