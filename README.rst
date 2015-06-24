@@ -8,9 +8,9 @@
 Minimal I/O Interpreter
 =======================
 
-.. image:: https://drone.io/bitbucket.org/miolang/mio/status.png
-   :target: https://drone.io/bitbucket.org/miolang/mio
-   :alt: Drone.io Build Status
+.. image:: https://travis-ci.org/mio-lang/mio.svg
+   :target: https://travis-ci.org/mio-lang/mio
+   :alt: Build Status
 
 This is a minimal I/O Interpreter. This is a rewrite of:
 
