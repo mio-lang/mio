@@ -2,7 +2,6 @@
 .. _virtualenv: https://pypy.python.org/pypi/virtualenv
 .. _virtualenvwrapper: https://pypy.python.org/pypi/virtualenvwrapper
 .. _Docker: https://docker.com/
-.. _fig: http://www.fig.sh/
 .. _Latest Build: https://drone.io/bitbucket.org/miolang/mio/files
 
 
@@ -52,12 +51,12 @@ a bit easier.
 Installation
 ------------
 
-Grab the source from https://bitbucket.org/miolang/mio and either
+Grab the source from https://github.com/mio-lang/mio and either
 run ``python setup.py develop`` or ``pip install -r requirements.txt``
 
 ::
     
-    $ hg clone https://bitbucket.org/miolang/mio
+    $ git clone https://github.com/mio-lang/mio.git
     $ cd mio
     $ pip install -r requirements.txt
 
@@ -75,12 +74,11 @@ and translating the interpreter.
     
     $ make
 
-As of `690c894 <https://bitbucket.org/miolang/mio/commits/690c894>`_ you can
-now build mio using `Docker`_ and `fig`_.
+You can also use `Docker`_ to build the interpreter:
 
 ::
     
-    $ fig build
+    $ docker build -t mio .
 
 
 Usage
@@ -98,13 +96,6 @@ Untranslated running on top of `Python`_ (*CPython*):
 ::
     
     $ miopy examples/hello.mio
-
-As of `690c894 <https://bitbucket.org/miolang/mio/commits/690c894>`_ you can
-now run mio using `Docker`_ and `fig`_.
-
-::
-    
-    $ fig run mio hello.mio
 
 
 Grammar

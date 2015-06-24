@@ -6,7 +6,7 @@
 """Bytecode"""
 
 
-from pypy.objspace.std.bytesobject import string_escape_encode
+from .rstringutils import string_escape_encode
 
 
 bytecodes = [

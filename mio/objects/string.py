@@ -1,7 +1,5 @@
-from pypy.objspace.std.bytesobject import string_escape_encode
-
-
 from .object import W_Object
+from ..rstringutils import string_escape_encode
 
 
 class W_String(W_Object):

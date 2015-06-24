@@ -1,9 +1,6 @@
-from pypy.objspace.std.bytesobject import string_escape_encode
-
-
-from ..errors import Error, LookupError
-
 from .object import W_Object
+from ..errors import Error, LookupError
+from ..rstringutils import string_escape_encode
 
 
 class W_Message(W_Object):

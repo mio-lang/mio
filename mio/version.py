@@ -1,12 +1,11 @@
-from subprocess import check_output
+"""Version Module
 
+So we only have to maintain version information in one place!
+"""
 
-version = None
-
-
-def build_version():
-    return check_output(["hg", "id", "-i"]).strip().rstrip("+")
-
-
-if version is None:
-    version = build_version()
+version_info = (0, 0, 1, "dev")  # (major, minor, patch, dev?)
+version = (
+    ".".join(map(str, version_info))
+    if version_info[-1] != "dev"
+    else "dev"
+)

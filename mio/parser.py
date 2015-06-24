@@ -7,12 +7,12 @@
 
 
 from rply import ParserGenerator
-from pypy.objspace.std.bytesobject import string_escape_encode
 
 
 from .ast import Message
 from .tokens import TOKENS
 from .errors import SyntaxError
+from .rstringutils import string_escape_encode
 
 
 pg = ParserGenerator(TOKENS.keys(), cache_id=__name__)
