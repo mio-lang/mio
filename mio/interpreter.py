@@ -123,7 +123,7 @@ class Interpreter(object):
 
             result = self.runsource(s)
 
-            if result is not self.space.null:
+            if result and result is not self.space.null:
                 print result.repr()
 
     def run(self, bc):  # noqa
