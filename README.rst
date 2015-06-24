@@ -16,6 +16,10 @@ Minimal I/O Interpreter
    :target: https://coveralls.io/r/mio-lang/mio
    :alt: Coverage
 
+.. image:: https://landscape.io/github/mio-lang/mio/master/landscape.png
+   :target: https://landscape.io/github/mio-lang/mio/master
+   :alt: Quality
+
 This is a minimal I/O Interpreter. This is a rewrite of:
 
 - https://bitbucket.org/prologic/mio-lang
