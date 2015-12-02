@@ -30,10 +30,10 @@ class Message(Node):
 
     def __len__(self):
         n = 0
-        next = self
-        while next is not None:
+        node = self
+        while node is not None:
             n += 1
-            next = next.next
+            node = node.next
         return n
 
     def __eq__(self, other):
@@ -52,16 +52,16 @@ class Message(Node):
     def repr(self):
         s = []
 
-        next = self
-        while next is not None:
-            if next.getargs():
+        node = self
+        while node is not None:
+            if node.getargs():
                 args = "(%s)" % ", ".join(
-                    [arg.repr() for arg in next.getargs()]
+                    [arg.repr() for arg in node.getargs()]
                 )
             else:
                 args = ""
-            s.append("%s%s" % (next.getname(), args))
-            next = next.getnext()
+            s.append("%s%s" % (node.getname(), args))
+            node = node.getnext()
 
         return " ".join(s)
 
@@ -80,9 +80,9 @@ class Message(Node):
     def getnext(self):
         return self.next
 
-    def setnext(self, next):
-        assert isinstance(next, Message)
-        self.next = next
+    def setnext(self, node):
+        assert isinstance(node, Message)
+        self.next = node
 
     def getvalue(self):
         return self.value
@@ -91,11 +91,11 @@ class Message(Node):
         self.value = value
 
     def compile(self, ctx, eval=True):
-        next = self
-        while next is not None:
-            args = next.getargs()
-            name = next.getname()
-            value = next.getvalue()
+        node = self
+        while node is not None:
+            args = node.getargs()
+            name = node.getname()
+            value = node.getvalue()
 
             if value is not None:
                 ctx.emit(bytecode.LOAD, ctx.register_constant(value))
@@ -112,4 +112,4 @@ class Message(Node):
             else:
                 ctx.emit(bytecode.PUSH, len(args))
 
-            next = next.getnext()
+            node = node.getnext()
