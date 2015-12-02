@@ -2,9 +2,9 @@
 
 ## Interpreter
 
-- [ ] Lexer
-- [ ] Lexer Tests
-- [ ] Parser
+- [X] Lexer
+- [X] Lexer Tests
+- [X] Parser
 - [ ] Parser Tests
 - [ ] Compiler
 - [ ] Compiler Tests
@@ -13,8 +13,8 @@
 
 ## Language Features
 
-- [ ] Literal Expressions
-- [ ] Numeric Expressions
+- [X] Literal Expressions
+- [X] Numeric Expressions
 - [ ] Functions
 - [ ] Objects
 - [ ] Methods
