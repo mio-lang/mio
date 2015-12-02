@@ -15,8 +15,8 @@ help:
 	@echo "test     Run unit and integration tests"
 
 clean:
-	@rm -f bin/mio
-	@make -C docs clean
+	@rm -rf bin/mio coverage
+	@make -C docs clean &> /dev/null
 
 docs:
 	@sphinx-apidoc -f -e -T -o docs/source/api mio
