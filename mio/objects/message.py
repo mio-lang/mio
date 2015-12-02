@@ -5,11 +5,11 @@ from ..rstringutils import string_escape_encode
 
 class W_Message(W_Object):
 
-    def __init__(self, space, name="", args=[], value=None, parent=None):
+    def __init__(self, space, name=None, args=None, value=None, parent=None):
         W_Object.__init__(self, space, parent=(parent or space.object))
 
-        self.name = name
-        self.args = args
+        self.name = name or ""
+        self.args = args or []
         self.value = value
 
         self.next = None

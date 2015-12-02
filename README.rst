@@ -12,7 +12,7 @@ Minimal I/O Interpreter
    :target: https://travis-ci.org/mio-lang/mio
    :alt: Build Status
 
-.. image:: https://coveralls.io/repos/mio-lang/mio/badge.png
+.. image:: https://coveralls.io/repos/mio-lang/mio/badge.svg
    :target: https://coveralls.io/r/mio-lang/mio
    :alt: Coverage
 

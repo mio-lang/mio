@@ -18,9 +18,9 @@ class Node(BaseBox):
 
 class Message(Node):
 
-    def __init__(self, name, args=[], value=None):
+    def __init__(self, name, args=None, value=None):
         self.name = name
-        self.args = args
+        self.args = args or []
         self.value = value
 
         if self.args and self.value is not None:
