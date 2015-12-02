@@ -4,13 +4,53 @@
 from glob import glob
 
 
-from setuptools import find_packages, setup
+from setuptools import setup, find_packages
+
+
+def parse_requirements(filename):
+    with open(filename, "r") as f:
+        for line in f:
+            if line and line[:2] not in ("#", "-e"):
+                yield line.strip()
 
 
 setup(
     name="mio",
-    version="0.0.1",
-    packages=find_packages(),
+    description="Minimal I/O Language",
+    long_description=open("README.rst", "r").read(),
+    author="James Mills",
+    author_email="James Mills, prologic at shortcircuit dot net dot au",
+    url="https://github.com/mio-lang/mio/",
+    download_url="https://github.com/mio-lang/mio/releases",
+    classifiers=[
+        "Development Status :: 1 - Alpha",
+        "Environment :: No Input/Output (Daemon)",
+        "Intended Audience :: Developers",
+        "Intended Audience :: End Users/Desktop",
+        "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Topic :: Software Development :: Interpreters",
+    ],
+    license="MIT",
+    keywords="minimal io mio language interpreter",
+    platforms="POSIX",
+    packages=find_packages("."),
+    include_package_data=True,
     scripts=glob("bin/*"),
+    install_requires=list(parse_requirements("requirements.txt")),
+    entry_points={
+        "console_scripts": [
+            "mio=mio.main:main",
+        ]
+    },
     test_suite="tests.main.main",
+    zip_safe=False,
+    use_scm_version={
+        "write_to": "mio/version.py",
+    },
+    setup_requires=[
+        "setuptools_scm"
+    ],
 )

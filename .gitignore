@@ -2,6 +2,7 @@
 bin
 dist
 *.bak
+.eggs
 build
 .cache
 *.py[co]
@@ -9,3 +10,4 @@ build
 coverage
 .coverage*
 *.egg-info
+*/version.py

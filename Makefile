@@ -1,6 +1,18 @@
-.PHONY: clean docs mio test
+.PHONY: clean docs help mio test
 
-all: mio
+PYTHON = python
+RPYTHON = rpython
+
+OPTS = "--output=bin/mio"
+TARGET = "mio/main.py"
+
+all: clean test build
+
+help:
+	@echo "clean    Remove build artifacts"
+	@echo "docs     Build documentation"
+	@echo "build    Build the interpreter"
+	@echo "test     Run unit and integration tests"
 
 clean:
 	@rm -f bin/mio
@@ -10,8 +22,8 @@ docs:
 	@sphinx-apidoc -f -e -T -o docs/source/api mio
 	@make -C docs html
 
-mio:
-	@rpython mio/main.py
+build:
+	$(RPYTHON) $(OPTS) $(TARGET)
 
 test:
-	@python -m tests.main
+	$(PYTHON) setup.py test
