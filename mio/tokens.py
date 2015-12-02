@@ -6,6 +6,7 @@
 """Tokens"""
 
 
+import re
 from collections import OrderedDict
 
 
@@ -79,8 +80,9 @@ TOKENS["T_COMMA"] = "\,"
 
 
 IGNORES = [
-    r"#.*",         # #Comment
-    r"\/\/.*",      # //Comment
-    r"\/\*.*\*\/",  # /*Comment*/
-    r"[ \t]+",      # Whitespace
+    # Whitespace
+    (r"[ \f\t\v]+",),
+
+    # Python style comments
+    (r"#[^\n\r]*", re.MULTILINE),
 ]

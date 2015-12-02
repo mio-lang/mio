@@ -14,13 +14,11 @@ from .tokens import TOKENS, IGNORES
 
 lg = LexerGenerator()
 
+for name, rule in TOKENS.iteritems():
+    lg.add(name, rule)
 
-for name, regex in TOKENS.iteritems():
-    lg.add(name, regex)
-
-for regex in IGNORES:
-    lg.ignore(regex)
-
+for rule in IGNORES:
+    lg.ignore(*rule)
 
 # This has to be called outside a function because the parser must be generated
 # in Python during translation, not in RPython during runtime.
