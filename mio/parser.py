@@ -11,7 +11,7 @@ from rply import ParserGenerator
 
 from .ast import Message
 from .tokens import TOKENS
-from .errors import SyntaxError
+from .errors import MioSyntaxError
 from .rstringutils import string_escape_encode
 
 
@@ -115,7 +115,7 @@ def error(state, token):
     else:
         col, line = str(sourcepos.colno), str(sourcepos.lineno)
 
-    raise SyntaxError(
+    raise MioSyntaxError(
         "Unexpected token <%s %s> at %s:%s:%s" % (
             token.gettokentype(), string_escape_encode(token.getstr(), "'"),
             state.filename, line, col

@@ -14,7 +14,7 @@ import mio
 from . import bytecode
 from .lexer import lex
 from .parser import parse
-from .errors import Error
+from .errors import MioError
 from .compiler import compile
 from .objects import W_Message
 from .rreadline import readline
@@ -198,7 +198,7 @@ class Interpreter(object):
                     break
                 else:
                     assert AssertionError("Unknown Bytecode: %d" % c)
-            except Error as e:
+            except MioError as e:
                 print e.repr()
                 return
 

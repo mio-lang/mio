@@ -1,5 +1,5 @@
-class Error(Exception):
-    """Error"""
+class MioError(Exception):
+    """Mio Error"""
 
     def __init__(self, value):
         self.value = value
@@ -19,13 +19,13 @@ class Error(Exception):
         return self.repr()
 
 
-class LookupError(Error):
-    """Lookup Error"""
+class MioLookupError(MioError):
+    """Mio Lookup Error"""
 
 
-class TypeError(Error):
-    """Type Error"""
+class MioTypeError(MioError):
+    """Mio Type Error"""
 
 
-class SyntaxError(Error):
-    """Syntax Error"""
+class MioSyntaxError(MioError):
+    """Mio Syntax Error"""

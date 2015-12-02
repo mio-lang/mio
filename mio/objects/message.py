@@ -1,5 +1,5 @@
 from .object import W_Object
-from ..errors import Error, LookupError
+from ..errors import MioError, MioLookupError
 from ..rstringutils import string_escape_encode
 
 
@@ -63,7 +63,7 @@ class W_Message(W_Object):
                                     space, receiver, context, next
                                 )
                             else:
-                                raise LookupError(
+                                raise MioLookupError(
                                     "%s has no attribute %s" % (
                                         receiver.repr(),
                                         string_escape_encode(name, "'")
@@ -73,7 +73,7 @@ class W_Message(W_Object):
                 next = next.next
                 # Help out the RPython Annotator
                 assert isinstance(next, W_Message) or next is None
-            except Error as e:
+            except MioError as e:
                 e.stack.append(e)
                 raise
 
