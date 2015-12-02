@@ -2,7 +2,7 @@
 .. _virtualenv: https://pypy.python.org/pypi/virtualenv
 .. _virtualenvwrapper: https://pypy.python.org/pypi/virtualenvwrapper
 .. _Docker: https://docker.com/
-.. _Latest Build: https://drone.io/bitbucket.org/miolang/mio/files
+.. _Latest Release: https://github.com/mio-lang/mio/releases
 
 
 Minimal I/O Interpreter
@@ -42,33 +42,20 @@ Environment using `virtualenv`_ and/or using the nice `virtualenvwrapper`_.
    
     $ mkvirtualenv mio
 
-You will need the `RPython <https://bitbucket.org/pypy/pypy>`_ toolchain
-to build the interpreter. The easiest way to do this is to
-`My Fork of PyPy <https://bitbucket.org/prologic/pypy>`_ which includes
-a convenient ``setup-rpython.py`` to make working with the RPython toolchain
-a bit easier.
-
-::
-    
-    $ hg clone https://bitbucket.org/prologic/pypy
-    $ cd pypy
-    $ python setup-pypy develop
-    $ python setup-rpython.py develop
-
 
 Installation
 ------------
 
 Grab the source from https://github.com/mio-lang/mio and either
-run ``python setup.py develop`` or ``pip install -r requirements.txt``
+run ``python setup.py develop`` or ``pip install -e .``
 
 ::
     
     $ git clone https://github.com/mio-lang/mio.git
     $ cd mio
-    $ pip install -r requirements.txt
+    $ pip install -e .
 
-You can also download the `Latest Build`_
+You can also download the `Latest Release`_
 
 
 Building
