@@ -1,6 +1,7 @@
 [run]
 omit = mio/main.py
        mio/__init__.py
+       mio/version.py
        mio/objects/__init__.py
        tests/*
 
