@@ -90,7 +90,7 @@ Untranslated running on top of `Python`_ (*CPython*):
 
 ::
     
-    $ miopy examples/hello.mio
+    $ mio examples/hello.mio
 
 
 Grammar

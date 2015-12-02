@@ -1,10 +1,10 @@
 *~
-bin
 dist
 *.bak
 .eggs
 build
 .cache
+bin/mio
 *.py[co]
 *.sw[po]
 coverage

@@ -97,7 +97,6 @@ def main(argv):
 
 
 def target(driver, args):
-    driver.exe_name = "bin/mio"
     return main, None
 
 
@@ -105,5 +104,5 @@ def jitpolicy(driver):
     return JitPolicy()
 
 
-if __name__ == "__main__":
-    main(sys.argv)
+def entrypoint():
+    raise SystemExit(main(sys.argv))

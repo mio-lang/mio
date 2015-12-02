@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 
 
-from glob import glob
-
-
 from setuptools import setup, find_packages
 
 
@@ -38,11 +35,10 @@ setup(
     platforms="POSIX",
     packages=find_packages("."),
     include_package_data=True,
-    scripts=glob("bin/*"),
     install_requires=list(parse_requirements("requirements.txt")),
     entry_points={
         "console_scripts": [
-            "mio=mio.main:main",
+            "mio=mio.main:entrypoint",
         ]
     },
     test_suite="tests.main.main",
