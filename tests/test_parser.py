@@ -7,6 +7,7 @@ import pytest
 from mio.lexer import lex
 from mio.ast import Message
 from mio.parser import parse
+from mio.errors import MioSyntaxError
 
 
 @pytest.mark.parametrize("source,expected", [
@@ -39,6 +40,11 @@ def test_parse_arguments(source, expected):
 def test_parse_message_with_arguments(source, expected):
     actual = parse(lex(source))
     assert actual == expected
+
+
+def test_error():
+    with pytest.raises(MioSyntaxError) as error:
+        parse(lex("f("))
 
 
 def test_parse_expressions():
